@@ -1,9 +1,9 @@
 // Here we are creating the new database
 const mongoose = require('mongoose');
 // Defining the mongo connect URL
-const connectonURL = 'mongodb://localhost:27017/waterreminder'
+const connectionURL = 'mongodb://localhost:27017/waterreminder'
 // Now we will establish the connection
-mongoose.connect(connectonURL,{
+mongoose.connect(connectionURL,{
     useNewUrlParser:true,
     useUnifiedTopology:true
 })
