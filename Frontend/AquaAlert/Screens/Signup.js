@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import { StyleSheet, Text, TextInput, View, Image, ImageBackground, TouchableOpacity, Animated } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient'
 import { MaterialCommunityIcons } from '@expo/vector-icons';
+import axios from 'axios';
 // import { TextInput, Icon } from 'react-native-material-ui';
 const Signup = ({navigation}) => {
     // State for the setting the placeholder in name in textbox
@@ -13,6 +14,7 @@ const Signup = ({navigation}) => {
     const [placeholderpassword, Setplaceholderpassword] = useState('Enter your password');
 
     // State for checking if user has enterd any password or not
+
     const [passwordwarning, setpasswordwarning] = useState(false);
 
     // State for checking if the password contains the alphanumeric character
@@ -79,7 +81,7 @@ const Signup = ({navigation}) => {
             hidepassword(true);
         }
     }
-    const checkdetails = () => {
+    const checkdetails = async () => {
         if (username.length == 0) {
             console.log('Please enter the name');
             setnamewarning(true);
@@ -149,6 +151,17 @@ const Signup = ({navigation}) => {
         else {
             setvalidpassword(true);
         }
+            try{
+                const response = await axios.post('http://10.0.2.2:5000/signup/usersignupapi',{
+                    username,
+                    email,
+                    password
+                });
+                console.log(response.data);
+            }
+            catch(err){
+                console.log(err);
+            }
     }
 
     // Creating the component of Login if user already has the account
