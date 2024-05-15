@@ -33,7 +33,7 @@ const Signup = ({navigation}) => {
     // State for storing the email value
     const [email, setemail] = useState('');
     // Regex expression for validating the email address
-    var validRegex = /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/;
+    var validRegex =  /^[a-zA-Z0-9.!#$%&'+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)$/;
     // State for displaying the warning if user did not enterd any email
     const [emailwaning, setemailwarning] = useState(false);
     // State for displaying the warning if user has entered the invalid email
@@ -81,6 +81,7 @@ const Signup = ({navigation}) => {
             hidepassword(true);
         }
     }
+    let temp1 = 0; // Deciding value will be pushed in the database or not
     const checkdetails = async () => {
         if (username.length == 0) {
             console.log('Please enter the name');
@@ -88,9 +89,11 @@ const Signup = ({navigation}) => {
         }
         else {
             setnamewarning(false);
+            temp1 = 1;
         }
 
         // Checking if the user has entered the valid name or not
+        let temp2 = 0;
         let flag = 0;
         for (let i = 0; i < username.length; i++) {
             if (username.charAt(i) >= '0' && username.charAt(i) <= '9') {
@@ -102,17 +105,22 @@ const Signup = ({navigation}) => {
         }
         else {
             setvalidname(false);
+            temp2 = 1;
         }
 
         // Chcking for the email address field
+        let temp5 = 0;
         if (email.length == 0) {
             setemailwarning(true);
+            temp6=1;
         }
         else {
             setemailwarning(false);
         }
+        let temp6 = 0;
         if (validRegex.test(email)) {
             setvalidemail(true);
+            temp5 = 1;
         }
         else {
             console.log('Invalid Email');
@@ -122,14 +130,17 @@ const Signup = ({navigation}) => {
 
         // Password
         // Checking if the user has enterd the password or not
+        let temp3 = 0;
         if (password.length == 0) {
             setpasswordwarning(true);
         }
         else {
             setpasswordwarning(false);
+            temp3 = 1;
         }
 
         // Checking if the user has entered the alphanumeric password or not
+        let temp4 = 0;
         let check1 = 0;
         let check2 = 0;
         let check3 = 0;
@@ -147,10 +158,12 @@ const Signup = ({navigation}) => {
 
         if (check1 == 1 && check2 == 1 && check3 == 1) {
             setvalidpassword(false);
+            temp4 = 1;
         }
         else {
             setvalidpassword(true);
         }
+        if (temp1==1 && temp2==1 && temp3==1 && temp4==1 && temp5==1 && temp6!=1){
             try{
                 const response = await axios.post('http://10.0.2.2:5000/signup/usersignupapi',{
                     username,
@@ -163,6 +176,7 @@ const Signup = ({navigation}) => {
                 console.log(err);
             }
     }
+}
 
     // Creating the component of Login if user already has the account
     const Login = () => {
@@ -240,12 +254,12 @@ const Signup = ({navigation}) => {
                 </View>
                 {/* Chcking the email is in the correct format or not*/}
                 {
-                    emailwaning && validemail && (
+                    emailwaning && (
                         <View><Text style={styles.warningname}>*Please enter the email address</Text></View>
                     )
                 }
                 {
-                    !validemail && !emailwaning &&  (
+                !validemail && !emailwaning &&  (
                         <View><Text style={styles.warningname}>*Please enter the valid email address</Text></View>
                     )
                 }
