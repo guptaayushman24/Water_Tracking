@@ -1,10 +1,11 @@
 import { useEffect, useState } from 'react';
-import { StyleSheet, Text, TextInput, View, Image, ImageBackground, TouchableOpacity, Animated } from 'react-native';
+import { StyleSheet, Text, TextInput, View, Image, ImageBackground, TouchableOpacity, Modal } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient'
-import { MaterialCommunityIcons } from '@expo/vector-icons';
 import axios from 'axios';
 // import { TextInput, Icon } from 'react-native-material-ui';
 const Signup = ({navigation}) => {
+
+
     // State for the setting the placeholder in name in textbox
     const [placeholdertext, Setplaceholdertext] = useState('Enter your name');
     // State for the setting the placeholder in email in textbox
@@ -12,6 +13,7 @@ const Signup = ({navigation}) => {
 
     // State for the setting the placeholder in name in textbox
     const [placeholderpassword, Setplaceholderpassword] = useState('Enter your password');
+
 
     // State for checking if user has enterd any password or not
 
@@ -46,6 +48,36 @@ const Signup = ({navigation}) => {
 
     // State is created for keeping the record of the number of clicks done on the eye image icon by the user
     const [clickcount, setclickcount] = useState(0);
+
+    const [showwarning,setshowwarning] = useState(false);
+    // If user exist then maintaing that state we are using these state
+    const [matchfound,setmatchfound] = useState(false);
+
+    // State for storing the signup data which is fetched from the mongodb
+    const [storedata,setstoredata] = useState([]);
+
+    const [Hide,setHide] = useState(true);
+
+        // Fetching the signup data from the mongodb
+        useEffect(()=>{
+            const Detail= async()=>{
+                try{
+                   const response =  await axios.get('http://10.0.2.2:5000/signup/usersignupdetail');
+                //    console.log(detail.data[1].email);
+                //    console.log(detail.data[0].email);
+                setstoredata(response.data);
+                }
+
+                catch(err){
+                    console.log(err);
+                }
+            }
+            Detail();
+        },[]);
+
+        const hide=()=>{
+            setHide(false);
+        }
 
     const handleInputFocus = () => {
 
@@ -83,6 +115,7 @@ const Signup = ({navigation}) => {
     }
     let temp1 = 0; // Deciding value will be pushed in the database or not
     const checkdetails = async () => {
+
         if (username.length == 0) {
             console.log('Please enter the name');
             setnamewarning(true);
@@ -163,6 +196,13 @@ const Signup = ({navigation}) => {
         else {
             setvalidpassword(true);
         }
+        // if (temp1==1 && temp2==1 && temp3==1 && temp4==1 && temp5==1 && temp6!=1){
+         const isMatch = storedata.some(detail => detail.email === email);
+        setmatchfound(isMatch);
+        setHide(true);
+        console.log(storedata);
+        // }
+
         if (temp1==1 && temp2==1 && temp3==1 && temp4==1 && temp5==1 && temp6!=1){
             try{
                 const response = await axios.post('http://10.0.2.2:5000/signup/usersignupapi',{
@@ -324,6 +364,22 @@ const Signup = ({navigation}) => {
                 </View>
                 <View style={{ marginStart: 10 }}><TouchableOpacity onPress={Login}><Text style={{ color: 'white', fontSize: 15 }}>Log in</Text></TouchableOpacity></View>
             </View>
+
+            {
+                 matchfound && Hide && (
+                    <Modal>
+                         <LinearGradient style={styles.box} colors={colors}>
+                    <View style={styles.alertbox}>
+                        <Text style={styles.alerttxt}>User Alerady Registered !!!!</Text>
+
+                        <View style={styles.okbtn}>
+                        <TouchableOpacity onPress={hide}><Text style={styles.oktxt}>OK</Text></TouchableOpacity>
+                    </View>
+                    </View>
+                </LinearGradient>
+                    </Modal>
+                )
+            }
         </View>
     )
 }
@@ -437,6 +493,32 @@ const styles = StyleSheet.create({
         textAlign: "center",
         margin: 2,
         color: '#535353'
+    },
+    btn:{
+        alignItems:"center",
+
+        marginTop:80,
+    },
+    box:{
+        alignItems:"center"
+    },
+    alertbox:{
+       width:350,
+       height:125,
+    //    backgroundColor:'red',
+    },
+    alerttxt:{
+        marginLeft:60,
+        marginTop:35,
+        fontSize:20
+    },
+    okbtn:{
+        // backgroundColor:"green",
+        marginLeft:280,
+        marginTop:38,
+    },
+    oktxt:{
+        textAlign:"center"
     }
 
 })

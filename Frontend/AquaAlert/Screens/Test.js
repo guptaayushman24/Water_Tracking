@@ -1,4 +1,4 @@
-import { Text,View ,StyleSheet, TouchableOpacity} from "react-native";
+import { Text,View ,StyleSheet, TouchableOpacity,Modal} from "react-native";
 import { useEffect, useState } from "react";
 import axios from "axios";
 import { TextInput } from "react-native-paper";
@@ -40,7 +40,7 @@ const handleCheck = () => {
 
     setmatchfound(isMatch);
     console.log(storedata);
-    setHide(true)
+    setHide(true);
 };
 
 const hide = ()=>{
@@ -60,7 +60,8 @@ return(
 
             {
                  matchfound && Hide && (
-                    <LinearGradient style={styles.box} colors={colors}>
+                    <Modal>
+                         <LinearGradient style={styles.box} colors={colors}>
                     <View style={styles.alertbox}>
                         <Text style={styles.alerttxt}>User Alerady Registered !!!!</Text>
 
@@ -69,6 +70,7 @@ return(
                     </View>
                     </View>
                 </LinearGradient>
+                    </Modal>
                 )
             }
 
