@@ -19,6 +19,7 @@ const [text, setText] = useState("");
 
 const [matchfound,setmatchfound] = useState(false);
 const [storedata,setstoredata] = useState([]);
+const [Hide,setHide] = useState(true);
 const colors = ['#db425b', '#2893f3'];
 useEffect(()=>{
     const Detail= async()=>{
@@ -27,7 +28,6 @@ useEffect(()=>{
         //    console.log(detail.data[1].email);
         //    console.log(detail.data[0].email);
         setstoredata(response.data);
-
         }
         catch(err){
             console.log(err);
@@ -40,8 +40,12 @@ const handleCheck = () => {
 
     setmatchfound(isMatch);
     console.log(storedata);
+    setHide(true)
 };
 
+const hide = ()=>{
+    setHide(false);
+}
 console.log(text);
 return(
 
@@ -55,24 +59,32 @@ return(
 
 
             {
-                matchfound ?(
-                   <Text>Match Found</Text>
-                ):
-                (
-                    <Text>Match not Found</Text>
+                 matchfound && Hide && (
+                    <LinearGradient style={styles.box} colors={colors}>
+                    <View style={styles.alertbox}>
+                        <Text style={styles.alerttxt}>User Alerady Registered !!!!</Text>
+
+                        <View style={styles.okbtn}>
+                        <TouchableOpacity onPress={hide}><Text style={styles.oktxt}>OK</Text></TouchableOpacity>
+                    </View>
+                    </View>
+                </LinearGradient>
                 )
             }
 
+            {
+                // Hide && (
+                //     <LinearGradient style={styles.box} colors={colors}>
+                //     <View style={styles.alertbox}>
+                //         <Text style={styles.alerttxt}>User Alerady Registered !!!!</Text>
 
-            <LinearGradient style={styles.box} colors={colors}>
-                <View style={styles.alertbox}>
-                    <Text style={styles.alerttxt}>User Alerady Registered !!!!</Text>
-
-                    <View style={styles.okbtn}>
-                    <TouchableOpacity><Text style={styles.oktxt}>OK</Text></TouchableOpacity>
-                </View>
-                </View>
-            </LinearGradient>
+                //         <View style={styles.okbtn}>
+                //         <TouchableOpacity onPress={hide}><Text style={styles.oktxt}>OK</Text></TouchableOpacity>
+                //     </View>
+                //     </View>
+                // </LinearGradient>
+                // )
+            }
              </View>
     )
 }
