@@ -1,18 +1,18 @@
 import { useEffect, useState } from 'react';
 import { StyleSheet, Text, TextInput, View, Image, ImageBackground, TouchableOpacity, Animated, Ic } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient'
-// import { TextInput } from 'react-native-paper'
+import axios from 'axios'
 const Signin = () => {
     // State for the setting the placeholder in name in textbox
-    const [placeholdertext, Setplaceholdertext] = useState('Enter your name');
+    const [placeholdertext, Setplaceholdertext] = useState('Enter your email');
 
     // State for handling the username
-    const [username, setusername] = useState('');
-    // State for displaying the warning if user did not enterd any name
-    const [namewarning, setnamewarning] = useState(false);
+    const [email, setemail] = useState('');
+    // State for displaying the warning if user did not enterd any email
+    const [emailwarning, setemailwarning] = useState(false);
 
-    // State for displaying the warning if user has entered the invalid name
-    const [validname, setvalidname] = useState(false);
+    // State for displaying the warning if user has entered the invalid email
+    const [validemail, setvalidemail] = useState(false);
 
 
     // State for handling the user password
@@ -36,9 +36,29 @@ const Signin = () => {
     // Giving the colour to the button in the range from #ce4845 to #813e85
     const colors = ['#ce4845', '#813e85'];
 
+    // Stroing the emails which is fetched from the mongodb
+    const [storedata,setstoredata] = useState([]);
+
+    // If user exist then maintaing that state we are using these state
+    const [matchfound,setmatchfound] = useState(true);
+
+     // Fetching the signup data from the mongodb
+     useEffect(()=>{
+        const Detail= async()=>{
+            try{
+               const response =  await axios.get('http://10.0.2.2:5000/signup/usersignupdetail');
+            setstoredata(response.data);
+            }
+
+            catch(err){
+                console.log(err);
+            }
+        }
+        Detail();
+    },[]);
 
     const handleInputFocus = () => {
-        if (placeholdertext === 'Enter your name') {
+        if (placeholdertext === 'Enter your email') {
             Setplaceholdertext('');
         }
     }
@@ -64,27 +84,22 @@ const Signin = () => {
 
     // Checking the details that are filled by the user are valid or not
     const checkdetails = () => {
-        if (username.length == 0) {
+        if (email.length == 0) {
             console.log('Please enter the name');
-            setnamewarning(true);
+            setemailwarning(true);
         }
         else {
-            setnamewarning(false);
+            setemailwarning(false);
         }
+        var validRegex = /^[a-zA-Z0-9.!#$%&'+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)$/;
 
-        // Checking if the user has entered the valid name or not
-        let flag = 0;
-
-        for (let i = 0; i < username.length; i++) {
-            if (username.charAt(i) >= '0' && username.charAt(i) <= '9') {
-                flag = 1;
-            }
-        }
-        if (flag == 1) {
-            setvalidname(true);
+        if (validRegex.test(email)) {
+            setvalidemail(true);
+            temp5 = 1;
         }
         else {
-            setvalidname(false);
+            console.log('Invalid Email');
+            setvalidemail(false);
         }
 
 
@@ -119,10 +134,14 @@ const Signin = () => {
         else {
             setvalidpassword(true);
         }
+
+        const isMatch = storedata.some(detail => detail.email === email);
+        setmatchfound(isMatch);
+        console.log(storedata);
     }
 
     // Signup button
-    const Signup=()=>{
+    const Signup = () => {
         console.log('Sign up button is pressed');
     }
 
@@ -138,7 +157,7 @@ const Signin = () => {
 
             {/* Name*/}
             <View style={styles.detailsview}>
-                <Text style={{ color: 'white' }}>Name</Text>
+                <Text style={{ color: 'white' }}>Email</Text>
             </View>
             {/* Name heading view ends */}
 
@@ -150,24 +169,22 @@ const Signin = () => {
                     placeholder={placeholdertext}
                     placeholderTextColor={'#444446'}
                     onFocus={handleInputFocus}
-                    value={username}
-                    onChangeText={(username) => setusername(username)}>
+                    value={email}
+                    onChangeText={(email) => setemail(email)}>
                 </TextInput>
             </View>
 
-            {/*Name Warning*/}
+            {/*Email Warning*/}
             {
-                namewarning && !validname && (
-                    <View>
-                        <Text style={styles.warningname}>*Please enter the name</Text>
-                    </View>
-                )
-            }
-            {
-                validname && (
-                    <View><Text style={styles.warningname}>*Invalid Name</Text></View>
-                )
-            }
+                    emailwarning && (
+                        <View><Text style={styles.warningname}>*Please enter the email address</Text></View>
+                    )
+                }
+                {
+                !validemail && !emailwarning &&  (
+                        <View><Text style={styles.warningname}>*Please enter the valid email address</Text></View>
+                    )
+                }
 
             {/* Password View*/}
             <View style={styles.detailsview}>
@@ -196,17 +213,17 @@ const Signin = () => {
 
             {
                 <View>
-                {
-                    passwordwarning && (
-                        <Text style={styles.warningname}>*Please enter the password</Text>
-                    )
-                }
-                {
-                    !validpassword || passwordwarning || (
-                        <Text style={styles.warningname}>*Password should contain characters and numbers</Text>
-                    )
-                }
-            </View>
+                    {
+                        passwordwarning && (
+                            <Text style={styles.warningname}>*Please enter the password</Text>
+                        )
+                    }
+                    {
+                        !validpassword || passwordwarning || (
+                            <Text style={styles.warningname}>*Password should contain characters and numbers</Text>
+                        )
+                    }
+                </View>
             }
 
             <LinearGradient colors={colors} style={styles.submitbtn}>
@@ -217,14 +234,23 @@ const Signin = () => {
                 </View>
             </LinearGradient>
 
+            <View>
+                {/* If length of email is zero then do not show the below line try once */}
+                {
+                    !matchfound  && (
+                        <Text style={styles.warning}>*Account does not exist please sign up</Text>
+                    )
+                }
+            </View>
 
-             {/* These is the view for the bootom design */}
-             <View style={styles.bottomview}>
-                    <View style={{marginLeft:"25%"}}>
-                        <Text style={styles.txtbottom}>Don't have an account?</Text>
-                        </View>
-                        <View style={{marginStart:10}}><TouchableOpacity onPress={Signup}><Text style={{color:'white',fontSize:15}}>Sign Up</Text></TouchableOpacity></View>
+
+            {/* These is the view for the bootom design */}
+            <View style={styles.bottomview}>
+                <View style={{ marginLeft: "25%" }}>
+                    <Text style={styles.txtbottom}>Don't have an account?</Text>
                 </View>
+                <View style={{ marginStart: 10 }}><TouchableOpacity onPress={Signup}><Text style={{ color: 'white', fontSize: 15 }}>Sign Up</Text></TouchableOpacity></View>
+            </View>
 
         </View>
     )
@@ -339,6 +365,11 @@ const styles = StyleSheet.create({
         textAlign: "center",
         margin: 2,
         color: '#535353'
+    },
+    warning:{
+        color:'red',
+        fontSize:20,
+        marginLeft:20
     }
 
 })
