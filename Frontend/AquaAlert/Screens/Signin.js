@@ -36,8 +36,14 @@ const Signin = () => {
     // Giving the colour to the button in the range from #ce4845 to #813e85
     const colors = ['#ce4845', '#813e85'];
 
-    // Stroing the emails which is fetched from the mongodb
+    // Stroing the data which is fetched from the mongodb
     const [storedata,setstoredata] = useState([]);
+
+    // Stroing the emails which is fetched from the mongodb
+    const [storeemail,setstoreemail] = useState([]);
+
+    // Stroing the emails which is fetched from the mongodb
+    const [storepassword,setstorepassword] = useState([]);
 
     // If user exist then maintaing that state we are using these state
     const [matchfound,setmatchfound] = useState(true);
@@ -47,7 +53,12 @@ const Signin = () => {
         const Detail= async()=>{
             try{
                const response =  await axios.get('http://10.0.2.2:5000/signup/usersignupdetail');
-            setstoredata(response.data);
+                setstoredata(response.data);
+                // To log passwords of each user
+                // Store all the password in one list same do for the email and then try to authenticate
+                response.data.forEach(user => {
+                    console.log(user.password);
+                });
             }
 
             catch(err){
@@ -117,7 +128,7 @@ const Signin = () => {
         let check2 = 0;
         let check3 = 0;
         for (let i = 0; i < password.length; i++) {
-            if (password.charAt(i) >= 'a' && password.charAt(i) <= 'z') {
+            if (password.charAt(i) >= 'a' && password.charAt(i) <= 'z' || password.charAt(i)>='A' && password.charAt(i)<='Z') {
                 check1 = 1;
             }
             else if (password.charAt(i) >= '0' && password.charAt(i) <= '9') {
