@@ -56,9 +56,15 @@ const Signin = () => {
                 setstoredata(response.data);
                 // To log passwords of each user
                 // Store all the password in one list same do for the email and then try to authenticate
-                response.data.forEach(user => {
-                    console.log(user.password);
-                });
+
+                const emails = response.data.map(user => user.email);
+                const passwords = response.data.map(user => user.password);
+
+                setstoreemail(emails);
+                setstorepassword(passwords);
+
+                console.log(emails); // List of all emails
+                console.log(passwords); // List of all passwords
             }
 
             catch(err){
@@ -67,7 +73,6 @@ const Signin = () => {
         }
         Detail();
     },[]);
-
     const handleInputFocus = () => {
         if (placeholdertext === 'Enter your email') {
             Setplaceholdertext('');
@@ -94,10 +99,15 @@ const Signin = () => {
     }
 
     // Checking the details that are filled by the user are valid or not
+    var temp1 = 0;
+    var temp2=0;
+    var temp3=0;
+    var temp4=0;
     const checkdetails = () => {
         if (email.length == 0) {
-            console.log('Please enter the name');
+            console.log('Please enter the email');
             setemailwarning(true);
+            temp1=1
         }
         else {
             setemailwarning(false);
@@ -106,7 +116,7 @@ const Signin = () => {
 
         if (validRegex.test(email)) {
             setvalidemail(true);
-            temp5 = 1;
+            temp2 = 1;
         }
         else {
             console.log('Invalid Email');
@@ -118,6 +128,7 @@ const Signin = () => {
         // Checking if the user has enterd the password or not
         if (password.length == 0) {
             setpasswordwarning(true);
+            temp3=1;
         }
         else {
             setpasswordwarning(false);
@@ -144,11 +155,17 @@ const Signin = () => {
         }
         else {
             setvalidpassword(true);
+            temp4=1;
         }
-
-        const isMatch = storedata.some(detail => detail.email === email);
-        setmatchfound(isMatch);
-        console.log(storedata);
+        console.log(temp1)
+        console.log(temp2)
+        console.log(temp3)
+        console.log(temp4)
+        if (temp1==0 && temp2==1 && temp3==0 && temp4==0){
+        const isMatch = storedata.some(detail => detail.email === email && detail.password === password);
+         setmatchfound(isMatch);
+         console.log("Hello");
+        }
     }
 
     // Signup button
