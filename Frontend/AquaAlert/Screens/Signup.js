@@ -220,7 +220,7 @@ const Signup = ({navigation}) => {
 
     // Creating the component of Login if user already has the account
     const Login = () => {
-        navigation.navigate()
+        // navigation.navigate()
     }
 
     // Giving the colour to the button in the range from #ce4845 to #813e85
@@ -362,7 +362,7 @@ const Signup = ({navigation}) => {
                 <View style={{ marginLeft: "25%" }}>
                     <Text style={styles.txtbottom}>Already have an account?</Text>
                 </View>
-                <View style={{ marginStart: 10 }}><TouchableOpacity onPress={Login}><Text style={{ color: 'white', fontSize: 15 }}>Log in</Text></TouchableOpacity></View>
+                <View style={{ marginStart: 10 }}><TouchableOpacity onPress={()=>navigation.navigate('SignInScreen')}><Text style={{ color: 'white', fontSize: 15 }}>Log in</Text></TouchableOpacity></View>
             </View>
 
             {

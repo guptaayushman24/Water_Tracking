@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import { StyleSheet, Text, TextInput, View, Image, ImageBackground, TouchableOpacity, Animated, Ic } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient'
 import axios from 'axios'
-const Signin = () => {
+const Signin = ({navigation}) => {
     // State for the setting the placeholder in name in textbox
     const [placeholdertext, Setplaceholdertext] = useState('Enter your email');
 
@@ -73,6 +73,16 @@ const Signin = () => {
         }
         Detail();
     },[]);
+    // useEffect(() => {
+    //     if (matchfound) {
+    //         navigation.navigate('HomePage');
+    //     }
+    // }, [matchfound]);
+
+
+
+
+
     const handleInputFocus = () => {
         if (placeholdertext === 'Enter your email') {
             Setplaceholdertext('');
@@ -169,9 +179,6 @@ const Signin = () => {
     }
 
     // Signup button
-    const Signup = () => {
-        console.log('Sign up button is pressed');
-    }
 
 
 
@@ -277,7 +284,7 @@ const Signin = () => {
                 <View style={{ marginLeft: "25%" }}>
                     <Text style={styles.txtbottom}>Don't have an account?</Text>
                 </View>
-                <View style={{ marginStart: 10 }}><TouchableOpacity onPress={Signup}><Text style={{ color: 'white', fontSize: 15 }}>Sign Up</Text></TouchableOpacity></View>
+                <View style={{ marginStart: 10 }}><TouchableOpacity onPress={()=>navigation.navigate('SignUpScreen')}><Text style={{ color: 'white', fontSize: 15 }}>Sign Up</Text></TouchableOpacity></View>
             </View>
 
         </View>
