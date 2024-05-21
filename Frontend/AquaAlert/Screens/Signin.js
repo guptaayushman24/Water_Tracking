@@ -171,12 +171,21 @@ const Signin = ({navigation}) => {
         console.log(temp2)
         console.log(temp3)
         console.log(temp4)
+
+
         if (temp1==0 && temp2==1 && temp3==0 && temp4==0){
         const isMatch = storedata.some(detail => detail.email === email && detail.password === password);
          setmatchfound(isMatch);
-         console.log("Hello");
+
+         if (isMatch) {
+            navigation.navigate('HomePage');
+        } else {
+            console.log('No match found');
+        }
         }
     }
+
+
 
     // Signup button
 

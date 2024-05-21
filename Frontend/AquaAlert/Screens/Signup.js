@@ -31,7 +31,7 @@ const Signup = ({navigation}) => {
     // State for displaying the warning if user has entered the invalid name
     const [validname, setvalidname] = useState(false);
 
-
+    const [userregistered,setuserregisterd] = useState(false);
     // State for storing the email value
     const [email, setemail] = useState('');
     // Regex expression for validating the email address
@@ -66,10 +66,12 @@ const Signup = ({navigation}) => {
                 //    console.log(detail.data[1].email);
                 //    console.log(detail.data[0].email);
                 setstoredata(response.data);
+                setuserregisterd(true);
                 }
 
                 catch(err){
                     console.log(err);
+                    setuserregisterd(false);
                 }
             }
             Detail();
@@ -203,7 +205,7 @@ const Signup = ({navigation}) => {
         console.log(storedata);
         // }
 
-        if (temp1==1 && temp2==1 && temp3==1 && temp4==1 && temp5==1 && temp6!=1){
+        if (isMatch==false && temp1==1 && temp2==1 && temp3==1 && temp4==1 && temp5==1 && temp6!=1){
             try{
                 const response = await axios.post('http://10.0.2.2:5000/signup/usersignupapi',{
                     username,
@@ -211,6 +213,7 @@ const Signup = ({navigation}) => {
                     password
                 });
                 console.log(response.data);
+                setuserregisterd(true);
             }
             catch(err){
                 console.log(err);
@@ -356,6 +359,15 @@ const Signup = ({navigation}) => {
                     </TouchableOpacity>
                 </View>
             </LinearGradient>
+
+            <View>
+                {
+                 userregistered && (
+
+                    <Text style={styles.registerd}>*User registerd successfully please go to login page</Text>
+                 )
+                }
+            </View>
 
             {/* These is the view for the bottom design */}
             <View style={styles.bottomview}>
@@ -518,6 +530,12 @@ const styles = StyleSheet.create({
         marginTop:38,
     },
     oktxt:{
+        textAlign:"center"
+    },
+    registerd:{
+        color:'red',
+        fontSize:15,
+        marginLeft:8,
         textAlign:"center"
     }
 
