@@ -63,10 +63,7 @@ const Signup = ({navigation}) => {
             const Detail= async()=>{
                 try{
                    const response =  await axios.get('http://10.0.2.2:5000/signup/usersignupdetail');
-                //    console.log(detail.data[1].email);
-                //    console.log(detail.data[0].email);
                 setstoredata(response.data);
-                setuserregisterd(true);
                 }
 
                 catch(err){
@@ -214,6 +211,7 @@ const Signup = ({navigation}) => {
                 });
                 console.log(response.data);
                 setuserregisterd(true);
+                console.log(userregistered);
             }
             catch(err){
                 console.log(err);
