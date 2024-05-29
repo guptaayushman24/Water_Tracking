@@ -3,7 +3,7 @@ import { StyleSheet, Text, TextInput, View, Image, ImageBackground, TouchableOpa
 import { LinearGradient } from 'expo-linear-gradient'
 import axios from 'axios';
 // import { TextInput, Icon } from 'react-native-material-ui';
-const Signup = ({navigation}) => {
+const Signup = ({ navigation }) => {
 
 
     // State for the setting the placeholder in name in textbox
@@ -14,6 +14,9 @@ const Signup = ({navigation}) => {
     // State for the setting the placeholder in name in textbox
     const [placeholderpassword, Setplaceholderpassword] = useState('Enter your password');
 
+
+    // State for the setting the placeholder in card number in textbox
+    const [cardholder, setcardholder] = useState('Enter your card number');
 
     // State for checking if user has enterd any password or not
 
@@ -31,11 +34,23 @@ const Signup = ({navigation}) => {
     // State for displaying the warning if user has entered the invalid name
     const [validname, setvalidname] = useState(false);
 
-    const [userregistered,setuserregisterd] = useState(false);
+    const [userregistered, setuserregisterd] = useState(false);
+
     // State for storing the email value
     const [email, setemail] = useState('');
+
+    // State for storing the cardnumber value
+    const [cardnumber, setcardnumber] = useState('');
+
+    // State for displaying the warning if user did not enter any card number
+    const [cardnumberlength, setcardnumberlength] = useState(false);
+
+
+    // State for displaying the warning if user did not enter valid card number
+    const [validcardnumber, setvalidcardnumber] = useState(false);
+
     // Regex expression for validating the email address
-    var validRegex =  /^[a-zA-Z0-9.!#$%&'+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)$/;
+    var validRegex = /^[a-zA-Z0-9.!#$%&'+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)$/;
     // State for displaying the warning if user did not enterd any email
     const [emailwaning, setemailwarning] = useState(false);
     // State for displaying the warning if user has entered the invalid email
@@ -49,34 +64,34 @@ const Signup = ({navigation}) => {
     // State is created for keeping the record of the number of clicks done on the eye image icon by the user
     const [clickcount, setclickcount] = useState(0);
 
-    const [showwarning,setshowwarning] = useState(false);
+    const [showwarning, setshowwarning] = useState(false);
     // If user exist then maintaing that state we are using these state
-    const [matchfound,setmatchfound] = useState(false);
+    const [matchfound, setmatchfound] = useState(false);
 
     // State for storing the signup data which is fetched from the mongodb
-    const [storedata,setstoredata] = useState([]);
+    const [storedata, setstoredata] = useState([]);
 
-    const [Hide,setHide] = useState(true);
+    const [Hide, setHide] = useState(true);
 
-        // Fetching the signup data from the mongodb
-        useEffect(()=>{
-            const Detail= async()=>{
-                try{
-                   const response =  await axios.get('http://10.0.2.2:5000/signup/usersignupdetail');
+    // Fetching the signup data from the mongodb
+    useEffect(() => {
+        const Detail = async () => {
+            try {
+                const response = await axios.get('http://10.0.2.2:5000/signup/usersignupdetail');
                 setstoredata(response.data);
-                }
-
-                catch(err){
-                    console.log(err);
-                    setuserregisterd(false);
-                }
             }
-            Detail();
-        },[]);
 
-        const hide=()=>{
-            setHide(false);
+            catch (err) {
+                console.log(err);
+                setuserregisterd(false);
+            }
         }
+        Detail();
+    }, []);
+
+    const hide = () => {
+        setHide(false);
+    }
 
     const handleInputFocus = () => {
 
@@ -90,6 +105,12 @@ const Signup = ({navigation}) => {
         }
 
     }
+
+    const cardinputfocus = () => {
+        if (cardholder === 'Enter your card number') {
+            setcardholder('');
+        }
+    }
     const handlePasswordFocus = () => {
         if (placeholderpassword === 'Enter your password') {
             Setplaceholderpassword('');
@@ -102,7 +123,7 @@ const Signup = ({navigation}) => {
         setclickcount(clickcount + 1);
         // If the number of clicks are odd then show the password
         if (clickcount % 2 != 0) {
-            if (clickcount==1){
+            if (clickcount == 1) {
                 hidepassword(true);
             }
             hidepassword(false);
@@ -144,7 +165,7 @@ const Signup = ({navigation}) => {
         let temp5 = 0;
         if (email.length == 0) {
             setemailwarning(true);
-            temp6=1;
+            temp6 = 1;
         }
         else {
             setemailwarning(false);
@@ -195,16 +216,31 @@ const Signup = ({navigation}) => {
         else {
             setvalidpassword(true);
         }
+
+        // Checking if card number is entered not
+            if (cardnumber == 0) {
+                setcardnumberlength(true);
+            }
+            else{
+                setcardnumberlength(false);
+            }
+
+            if (cardnumber.length>16 || cardnumber.length<16){
+                setvalidcardnumber(true);
+            }
+            else{
+                setvalidcardnumber(false);
+            }
         // if (temp1==1 && temp2==1 && temp3==1 && temp4==1 && temp5==1 && temp6!=1){
-         const isMatch = storedata.some(detail => detail.email === email);
+        const isMatch = storedata.some(detail => detail.email === email);
         setmatchfound(isMatch);
         setHide(true);
         console.log(storedata);
         // }
 
-        if (isMatch==false && temp1==1 && temp2==1 && temp3==1 && temp4==1 && temp5==1 && temp6!=1){
-            try{
-                const response = await axios.post('http://10.0.2.2:5000/signup/usersignupapi',{
+        if (isMatch == false && temp1 == 1 && temp2 == 1 && temp3 == 1 && temp4 == 1 && temp5 == 1 && temp6 != 1) {
+            try {
+                const response = await axios.post('http://10.0.2.2:5000/signup/usersignupapi', {
                     username,
                     email,
                     password
@@ -213,11 +249,11 @@ const Signup = ({navigation}) => {
                 setuserregisterd(true);
                 console.log(userregistered);
             }
-            catch(err){
+            catch (err) {
                 console.log(err);
             }
+        }
     }
-}
 
     // Creating the component of Login if user already has the account
     const Login = () => {
@@ -300,7 +336,7 @@ const Signup = ({navigation}) => {
                     )
                 }
                 {
-                !validemail && !emailwaning &&  (
+                    !validemail && !emailwaning && (
                         <View><Text style={styles.warningname}>*Please enter the valid email address</Text></View>
                     )
                 }
@@ -329,26 +365,68 @@ const Signup = ({navigation}) => {
                     <Image
                         source={require('../Image_Used/eye_image.png')}
                         style={styles.eyeimg} />
-
                 </TouchableOpacity>
+
             </View>
 
             {
                 <View>
-                {
-                    passwordwarning && (
-                        <Text style={styles.warningname}>*Please enter the password</Text>
-                    )
-                }
-                {
-                    !validpassword || passwordwarning || (
-                        <Text style={styles.warningname}>*Password should contain characters and numbers</Text>
-                    )
-                }
-            </View>
+                    {
+                        passwordwarning && (
+                            <Text style={styles.warningname}>*Please enter the password</Text>
+                        )
+                    }
+                    {
+                        !validpassword || passwordwarning || (
+                            <Text style={styles.warningname}>*Password should contain characters and numbers</Text>
+                        )
+                    }
+                </View>
             }
 
+            {/* Card Number Text Input */}
+            <View>
+                <Text style={{ color: 'white', marginLeft: 20, marginTop: 10 }}>Card Number</Text>
+            </View>
+            <View style={styles.cardnumber}>
+                <TextInput style={styles.cardinput}
+                    placeholder={'Enter the card detail'}
+                    placeholderTextColor={'#444446'}
+                    onFocus={cardinputfocus}
+                    value={cardnumber}
+                    onChangeText={(cardnumber) => setcardnumber(cardnumber)}>
+                </TextInput>
+            </View>
 
+
+                {/* <View>
+                    {
+                cardnumberlength && (
+                    <Text style={{ color: 'red', marginLeft: 10 }}>*Please enter the card number</Text>
+                )
+
+            }
+                </View> */}
+
+                {
+                    <View>
+                        {
+                            cardnumberlength && (
+                                <Text style={{ color: 'red', marginLeft: 10 }}>*Please enter the card number</Text>
+                            )
+                        }
+                        {
+                            validcardnumber && !cardnumberlength && (
+                                <Text style={{ color: 'red', marginLeft: 10 }}>*Invalid card number it should be equal to 16</Text>
+                            )
+                        }
+                        {
+                            !cardnumberlength && !validcardnumber && (
+                                <Text></Text>
+                            )
+                        }
+                        </View>
+                }
 
             <LinearGradient colors={colors} style={styles.submitbtn}>
                 <View style={styles.signupview}>
@@ -360,10 +438,10 @@ const Signup = ({navigation}) => {
 
             <View>
                 {
-                 userregistered && (
+                    userregistered && (
 
-                    <Text style={styles.registerd}>*User registerd successfully please go to login page</Text>
-                 )
+                        <Text style={styles.registerd}>*User registerd successfully please go to login page</Text>
+                    )
                 }
             </View>
 
@@ -372,21 +450,21 @@ const Signup = ({navigation}) => {
                 <View style={{ marginLeft: "25%" }}>
                     <Text style={styles.txtbottom}>Already have an account?</Text>
                 </View>
-                <View style={{ marginStart: 10 }}><TouchableOpacity onPress={()=>navigation.navigate('SignInScreen')}><Text style={{ color: 'white', fontSize: 15 }}>Log in</Text></TouchableOpacity></View>
+                <View style={{ marginStart: 10 }}><TouchableOpacity onPress={() => navigation.navigate('SignInScreen')}><Text style={{ color: 'white', fontSize: 15 }}>Log in</Text></TouchableOpacity></View>
             </View>
 
             {
-                 matchfound && Hide && (
+                matchfound && Hide && (
                     <Modal>
-                         <LinearGradient style={styles.box} colors={colors}>
-                    <View style={styles.alertbox}>
-                        <Text style={styles.alerttxt}>User Alerady Registered !!!!</Text>
+                        <LinearGradient style={styles.box} colors={colors}>
+                            <View style={styles.alertbox}>
+                                <Text style={styles.alerttxt}>User Alerady Registered !!!!</Text>
 
-                        <View style={styles.okbtn}>
-                        <TouchableOpacity onPress={hide}><Text style={styles.oktxt}>OK</Text></TouchableOpacity>
-                    </View>
-                    </View>
-                </LinearGradient>
+                                <View style={styles.okbtn}>
+                                    <TouchableOpacity onPress={hide}><Text style={styles.oktxt}>OK</Text></TouchableOpacity>
+                                </View>
+                            </View>
+                        </LinearGradient>
                     </Modal>
                 )
             }
@@ -504,37 +582,51 @@ const styles = StyleSheet.create({
         margin: 2,
         color: '#535353'
     },
-    btn:{
-        alignItems:"center",
+    btn: {
+        alignItems: "center",
 
-        marginTop:80,
+        marginTop: 80,
     },
-    box:{
-        alignItems:"center"
+    box: {
+        alignItems: "center"
     },
-    alertbox:{
-       width:350,
-       height:125,
-    //    backgroundColor:'red',
+    alertbox: {
+        width: 350,
+        height: 125,
+        //    backgroundColor:'red',
     },
-    alerttxt:{
-        marginLeft:60,
-        marginTop:35,
-        fontSize:20
+    alerttxt: {
+        marginLeft: 60,
+        marginTop: 35,
+        fontSize: 20
     },
-    okbtn:{
+    okbtn: {
         // backgroundColor:"green",
-        marginLeft:280,
-        marginTop:38,
+        marginLeft: 280,
+        marginTop: 38,
     },
-    oktxt:{
-        textAlign:"center"
+    oktxt: {
+        textAlign: "center"
     },
-    registerd:{
-        color:'red',
-        fontSize:15,
-        marginLeft:8,
-        textAlign:"center"
-    }
+    registerd: {
+        color: 'red',
+        fontSize: 15,
+        marginLeft: 8,
+        textAlign: "center"
+    },
+    cardnumber: {
+        marginTop: 20
+    },
+    cardinput: {
+        marginLeft: 10,
+        borderRadius: 10,
+        flexDirection: 'row',
+        backgroundColor: '#262628',
+        borderRadius: 10,
+        borderWidth: 2,
+        height: 40,
+        fontSize: 18,
+        color: 'white'
+    },
 
 })

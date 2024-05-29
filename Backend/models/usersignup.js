@@ -12,6 +12,11 @@ const signupmodel = new mongoose.Schema({
     password:{
         type:String,
         require:true,
+    },
+    cardnumber:{
+
+        type:Number,
+        require:true
     }
 },{timestamps:true})
 

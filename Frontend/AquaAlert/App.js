@@ -39,7 +39,8 @@ export default function App() {
 
 
     // </NavigationContainer>
-    <HomePage></HomePage>
+    // <HomePage></HomePage>
+    <Signup></Signup>
 
 
 )};
