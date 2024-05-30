@@ -9,10 +9,12 @@ import HomePage from './Screens/HomePage';
 import Account from './Screens/Account';
 import Wallet from './Screens/Account';
 import Report from './Screens/Account';
+import BankDetail from './Screens/BankDetail'
 export default function App() {
   const Stack = createNativeStackNavigator();
   const Tab = createBottomTabNavigator();
   // function HomeTabs() {
+
   //   return (
 
   //    <Tab.Navigator>
@@ -40,7 +42,8 @@ export default function App() {
 
     // </NavigationContainer>
     // <HomePage></HomePage>
-    <Signup></Signup>
+    // <Signup></Signup>
+    <BankDetail></BankDetail>
 
 
 )};
