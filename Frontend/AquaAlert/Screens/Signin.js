@@ -178,7 +178,7 @@ const Signin = ({navigation}) => {
          setmatchfound(isMatch);
 
          if (isMatch) {
-            navigation.navigate('HomePage');
+            navigation.navigate('BankDetail');
         } else {
             console.log('No match found');
         }

@@ -32,6 +32,26 @@ const BankDetail = ()=>{
      // State for checking the email is valid or not
      const [validemail,setvalidemail] = useState(false);
 
+     const [matchfound,setmatchfound] = useState(false);
+
+     const [storedata,setstoredata] = useState([]);
+
+    let temp1 = 0;
+    let temp2 = 0;
+    let temp3 = 0;
+
+    useEffect(()=>{
+        const Detail = async () =>{
+            try{
+                const respones = await axios.get('http://10.0.2.2:5000/signup/usersignupdetail');
+                setstoredata(respones.data);
+            }
+            catch(err){
+                console.log(err);
+            }
+        }
+        Detail();
+    },[])
     const checkdetails=()=>{
         if (bankname.length==0){
 
@@ -39,6 +59,7 @@ const BankDetail = ()=>{
         }
         else{
             setvalidbankname(false);
+            temp1=1;
         }
 
         if (accountnumber.length==0){
@@ -47,6 +68,7 @@ const BankDetail = ()=>{
         }
         else{
             setaccountnumberlength(false);
+            temp2=1;
         }
 
         if (email.length==0){
@@ -54,7 +76,9 @@ const BankDetail = ()=>{
         }
         else{
             setemaillength(false);
+            temp3=1;
         }
+
 
         var flag=0;
         for (var i=0;i<accountnumber.length;i++){
@@ -88,7 +112,23 @@ const BankDetail = ()=>{
             setvalidemail(true);
         }
 
+        const isMatch = storedata.some(detail=>detail.email===email);
+        setmatchfound(isMatch);
 
+        if (temp1==1 && temp2==1 && temp3==1 && isMatch){
+            try{
+                const response = axios.post('http://10.0.2.2:5000/bank/bankdetail',{
+                    bankname,
+                    accountnumber,
+                    email
+                });
+                console.log(response.data);
+                console.log(temp1);
+            }
+            catch(err){
+                console.log(err);
+            }
+        }
     }
 
     return(

@@ -15,4 +15,16 @@ router.post('/bankdetail',async(req,res)=>{
    }
 })
 
+router.get('/bankdetailget',async(req,res)=>{
+   try{
+      const data = await bankdetailschema.find();
+      res.status(200).json(data);
+      console.log(data);
+   }
+   catch(err){
+      res.status(500).json({err:'Internal Server Error'});
+      console.log(err);
+   }
+})
+
 module.exports = router;

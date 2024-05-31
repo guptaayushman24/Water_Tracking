@@ -10,40 +10,45 @@ import Account from './Screens/Account';
 import Wallet from './Screens/Account';
 import Report from './Screens/Account';
 import BankDetail from './Screens/BankDetail'
+import AddMoney from './Screens/AddMoney';
 export default function App() {
   const Stack = createNativeStackNavigator();
   const Tab = createBottomTabNavigator();
-  // function HomeTabs() {
 
-  //   return (
+  function HomeTabs() {
 
-  //    <Tab.Navigator>
-  //       <Tab.Screen name="Home" component={HomePage} options={{headerShown:false}} />
-  //       <Tab.Screen name="Profile" component={Wallet} options={{headerShown:false}} />
-  //       <Tab.Screen name="Report" component={Report} options={{headerShown:false}}/>
-  //       <Tab.Screen name="Account" component={Account} options={{headerShown:false}} />
-  //     </Tab.Navigator>
-  //   );
-  // }
+    return (
+
+     <Tab.Navigator>
+        <Tab.Screen name="Home" component={HomePage} options={{headerShown:false}} />
+        <Tab.Screen name="Profile" component={Wallet} options={{headerShown:false}} />
+        <Tab.Screen name="Report" component={Report} options={{headerShown:false}}/>
+        <Tab.Screen name="Account" component={Account} options={{headerShown:false}} />
+      </Tab.Navigator>
+    );
+  }
   return (
 
 
 
-    // <NavigationContainer>
+    <NavigationContainer>
 
-    //   <Stack.Navigator initialRouteName='SignInScreen'>
-
-
-    //     <Stack.Screen name='SignInScreen' component={Signin} options={{headerShown:false}}/>
-    //   <Stack.Screen name='SignUpScreen' component={Signup} options={{headerShown:false}}/>
-    //     <Stack.Screen name='HomePage' component={HomeTabs} options={{headerShown:false}}/>
-    //   </Stack.Navigator>
+      <Stack.Navigator initialRouteName='SignInScreen'>
 
 
-    // </NavigationContainer>
+        <Stack.Screen name='SignInScreen' component={Signin} options={{headerShown:false}}/>
+      <Stack.Screen name='SignUpScreen' component={Signup} options={{headerShown:false}}/>
+        <Stack.Screen name='HomePage' component={HomeTabs} options={{headerShown:false}}/>
+        <Stack.Screen name='BankDetail' component={BankDetail} options={{headerShown:false}}/>
+      </Stack.Navigator>
+
+
+    </NavigationContainer>
     // <HomePage></HomePage>
     // <Signup></Signup>
-    <BankDetail></BankDetail>
+    // <Signin></Signin>
+    // <BankDetail></BankDetail>
+    // <AddMoney></AddMoney>
 
 
 )};

@@ -8,7 +8,7 @@ accountnumber:{
     type:Number,
     require:true
 },
-accountholderemail:{
+email:{
     type:String,
     require:true
 },
@@ -17,10 +17,6 @@ totalamount:{
 
     require:true
 },
-withdraamount:{
-    type:Number,
-    require:true
-}
 },{timestamps:true})
 const bankdetails = mongoose.model('bankdetails',detail);
 module.exports = bankdetails;

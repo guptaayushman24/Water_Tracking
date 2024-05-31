@@ -218,6 +218,7 @@ const Signup = ({ navigation }) => {
         }
 
         // Checking if card number is entered not
+        let temp7=0;
             if (cardnumber == 0) {
                 setcardnumberlength(true);
             }
@@ -225,11 +226,13 @@ const Signup = ({ navigation }) => {
                 setcardnumberlength(false);
             }
 
-            if (cardnumber.length>16 || cardnumber.length<16){
+            if (cardnumber.length>0 && cardnumber.length<16){
                 setvalidcardnumber(true);
             }
             else{
                 setvalidcardnumber(false);
+                console.log(cardnumber.length)
+                temp7=1;
             }
         // if (temp1==1 && temp2==1 && temp3==1 && temp4==1 && temp5==1 && temp6!=1){
         const isMatch = storedata.some(detail => detail.email === email);
@@ -238,12 +241,13 @@ const Signup = ({ navigation }) => {
         console.log(storedata);
         // }
 
-        if (isMatch == false && temp1 == 1 && temp2 == 1 && temp3 == 1 && temp4 == 1 && temp5 == 1 && temp6 != 1) {
+        if (isMatch == false && temp1 == 1 && temp2 == 1 && temp3 == 1 && temp4 == 1 && temp5 == 1 && temp6 != 1 && temp7==1) {
             try {
                 const response = await axios.post('http://10.0.2.2:5000/signup/usersignupapi', {
                     username,
                     email,
-                    password
+                    password,
+                    cardnumber
                 });
                 console.log(response.data);
                 setuserregisterd(true);
@@ -399,14 +403,6 @@ const Signup = ({ navigation }) => {
             </View>
 
 
-                {/* <View>
-                    {
-                cardnumberlength && (
-                    <Text style={{ color: 'red', marginLeft: 10 }}>*Please enter the card number</Text>
-                )
-
-            }
-                </View> */}
 
                 {
                     <View>
