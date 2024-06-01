@@ -8,11 +8,11 @@ accountnumber:{
     type:Number,
     require:true
 },
-email:{
+signupemail:{
     type:String,
     require:true
 },
-totalamount:{
+amountlength:{
     type:Number,
 
     require:true
