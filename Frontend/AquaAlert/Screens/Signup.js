@@ -3,8 +3,7 @@ import { StyleSheet, Text, TextInput, View, Image, ImageBackground, TouchableOpa
 import { LinearGradient } from 'expo-linear-gradient'
 import axios from 'axios';
 // import { TextInput, Icon } from 'react-native-material-ui';
-const Signup = ({ navigation }) => {
-
+const Signup = ({navigation}) => {
 
     // State for the setting the placeholder in name in textbox
     const [placeholdertext, Setplaceholdertext] = useState('Enter your name');
@@ -13,6 +12,7 @@ const Signup = ({ navigation }) => {
 
     // State for the setting the placeholder in name in textbox
     const [placeholderpassword, Setplaceholderpassword] = useState('Enter your password');
+
 
 
     // State for the setting the placeholder in card number in textbox
@@ -83,11 +83,13 @@ const Signup = ({ navigation }) => {
 
             catch (err) {
                 console.log(err);
-                setuserregisterd(false);
+                // setuserregisterd(false);
             }
         }
         Detail();
     }, []);
+
+
 
     const hide = () => {
         setHide(false);
@@ -218,22 +220,22 @@ const Signup = ({ navigation }) => {
         }
 
         // Checking if card number is entered not
-        let temp7=0;
-            if (cardnumber == 0) {
-                setcardnumberlength(true);
-            }
-            else{
-                setcardnumberlength(false);
-            }
+        let temp7 = 0;
+        if (cardnumber == 0) {
+            setcardnumberlength(true);
+        }
+        else {
+            setcardnumberlength(false);
+        }
 
-            if (cardnumber.length>0 && cardnumber.length<16){
-                setvalidcardnumber(true);
-            }
-            else{
-                setvalidcardnumber(false);
-                console.log(cardnumber.length)
-                temp7=1;
-            }
+        if (cardnumber.length > 0 && cardnumber.length < 16) {
+            setvalidcardnumber(true);
+        }
+        else {
+            setvalidcardnumber(false);
+            console.log(cardnumber.length)
+            temp7 = 1;
+        }
         // if (temp1==1 && temp2==1 && temp3==1 && temp4==1 && temp5==1 && temp6!=1){
         const isMatch = storedata.some(detail => detail.email === email);
         setmatchfound(isMatch);
@@ -241,7 +243,7 @@ const Signup = ({ navigation }) => {
         console.log(storedata);
         // }
 
-        if (isMatch == false && temp1 == 1 && temp2 == 1 && temp3 == 1 && temp4 == 1 && temp5 == 1 && temp6 != 1 && temp7==1) {
+        if (isMatch == false && temp1 == 1 && temp2 == 1 && temp3 == 1 && temp4 == 1 && temp5 == 1 && temp6 != 1 && temp7 == 1) {
             try {
                 const response = await axios.post('http://10.0.2.2:5000/signup/usersignupapi', {
                     username,
@@ -252,6 +254,8 @@ const Signup = ({ navigation }) => {
                 console.log(response.data);
                 setuserregisterd(true);
                 console.log(userregistered);
+                navigation.navigate('BankDetail', { email: email });
+                console.log("Hello");
             }
             catch (err) {
                 console.log(err);
@@ -404,25 +408,25 @@ const Signup = ({ navigation }) => {
 
 
 
-                {
-                    <View>
-                        {
-                            cardnumberlength && (
-                                <Text style={{ color: 'red', marginLeft: 10 }}>*Please enter the card number</Text>
-                            )
-                        }
-                        {
-                            validcardnumber && !cardnumberlength && (
-                                <Text style={{ color: 'red', marginLeft: 10 }}>*Invalid card number it should be equal to 16</Text>
-                            )
-                        }
-                        {
-                            !cardnumberlength && !validcardnumber && (
-                                <Text></Text>
-                            )
-                        }
-                        </View>
-                }
+            {
+                <View>
+                    {
+                        cardnumberlength && (
+                            <Text style={{ color: 'red', marginLeft: 10 }}>*Please enter the card number</Text>
+                        )
+                    }
+                    {
+                        validcardnumber && !cardnumberlength && (
+                            <Text style={{ color: 'red', marginLeft: 10 }}>*Invalid card number it should be equal to 16</Text>
+                        )
+                    }
+                    {
+                        !cardnumberlength && !validcardnumber && (
+                            <Text></Text>
+                        )
+                    }
+                </View>
+            }
 
             <LinearGradient colors={colors} style={styles.submitbtn}>
                 <View style={styles.signupview}>
@@ -436,7 +440,7 @@ const Signup = ({ navigation }) => {
                 {
                     userregistered && (
 
-                        <Text style={styles.registerd}>*User registerd successfully please go to login page</Text>
+                        <Text style={styles.registerd}>*User registerd successfully</Text>
                     )
                 }
             </View>

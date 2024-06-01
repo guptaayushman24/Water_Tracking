@@ -1,9 +1,13 @@
 import { useEffect, useState } from 'react';
 import { StyleSheet, Text, TextInput, View, Image, ImageBackground, TouchableOpacity, Modal } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient'
+import { useRoute } from '@react-navigation/native';
 import axios from 'axios';
 
 const BankDetail = ()=>{
+    const route = useRoute();
+    // const {signupemail} = props.route.email;
+    // console.log(signupemail);
     // Storing the bank name in the variable
     const [bankname,setbankname] = useState('');
 
@@ -11,6 +15,7 @@ const BankDetail = ()=>{
     const [accountnumber,setaccountnumber] = useState('');
 
     // Storing the email  in the variable
+
     const [email,setemail] = useState('');
 
 
@@ -114,6 +119,7 @@ const BankDetail = ()=>{
 
         const isMatch = storedata.some(detail=>detail.email===email);
         setmatchfound(isMatch);
+        console.log(storedata);
 
         if (temp1==1 && temp2==1 && temp3==1 && isMatch){
             try{
@@ -189,6 +195,7 @@ const BankDetail = ()=>{
                 <TextInput
                 placeholder='Enter the Account Holder Email'
                 style={{fontSize:20}}
+                value={route.params.email}
                 onChangeText={(email)=>setemail(email)}></TextInput>
             </View>
 
@@ -213,7 +220,6 @@ const BankDetail = ()=>{
                     <Text style={styles.submittxt}>Submit</Text>
                 </TouchableOpacity>
             </View>
-
            </View>
         </View>
     )
