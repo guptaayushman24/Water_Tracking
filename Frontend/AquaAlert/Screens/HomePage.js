@@ -4,7 +4,7 @@ import { NavigationContainer } from '@react-navigation/native';
 import Wallet from './Wallet';
 import Report from './Report';
 import Account from './Account';
-const Tab = createBottomTabNavigator();
+import AddMoney from './AddMoney';
 const HomePage = () => {
     return (
         <View style={styles.main}>

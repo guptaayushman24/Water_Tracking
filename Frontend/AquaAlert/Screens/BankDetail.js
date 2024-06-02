@@ -34,25 +34,34 @@ const BankDetail = () => {
     const [amountlength, setamountlength] = useState('');
     const [amount, setamount] = useState(false);
 
-    const [validamount,setvalidamount] = useState(false);
+    const [validamount, setvalidamount] = useState(false);
+
+    // State for storing the cardnumber value
+    const [cardnumber, setcardnumber] = useState('');
+
+     // State for displaying the warning if user did not enter any card number
+     const [cardnumberlength, setcardnumberlength] = useState(false);
+
+     // State for displaying the warning if user did not enter valid card number
+    const [validcardnumber, setvalidcardnumber] = useState(false);
 
 
     let temp1 = 0;
     let temp2 = 0;
     let temp3 = 0;
     let temp4 = 0;
-    useEffect(() => {
-        const Detail = async () => {
-            try {
-                const respones = await axios.get('http://10.0.2.2:5000/signup/usersignupdetail');
-                setstoredata(respones.data);
-            }
-            catch (err) {
-                console.log(err);
-            }
-        }
-        Detail();
-    }, [])
+    // useEffect(() => {
+    //     const Detail = async () => {
+    //         try {
+    //             const respones = await axios.get('http://10.0.2.2:5000/signup/usersignupdetail');
+    //             setstoredata(respones.data);
+    //         }
+    //         catch (err) {
+    //             console.log(err);
+    //         }
+    //     }
+    //     Detail();
+    // }, [])
     const checkdetails = () => {
         if (bankname.length == 0) {
 
@@ -110,12 +119,12 @@ const BankDetail = () => {
 
         }
 
-        if (parseInt(amountlength)>=100 && parseInt(amountlength)<=50000){
+        if (parseInt(amountlength) >= 100 && parseInt(amountlength) <= 50000) {
             console.log(parseInt(amountlength));
             setvalidamount(false);
-            temp4=1;
+            temp4 = 1;
         }
-        else{
+        else {
             setvalidamount(true);
         }
 
@@ -123,12 +132,29 @@ const BankDetail = () => {
         // setmatchfound(isMatch);
         // console.log(storedata);
 
-        if (temp1 == 1 && temp2 == 1 && temp4==1) {
+        if (cardnumber == 0) {
+            setcardnumberlength(true);
+        }
+        else {
+            setcardnumberlength(false);
+        }
+
+        if (cardnumber.length > 0 && cardnumber.length < 16) {
+            setvalidcardnumber(true);
+        }
+        else {
+            setvalidcardnumber(false);
+            console.log(cardnumber.length)
+            temp3 = 1;
+        }
+
+        if (temp1 == 1 && temp2 == 1 && temp3==1 &&  temp4 == 1) {
             try {
                 const response = axios.post('http://10.0.2.2:5000/bank/bankdetail', {
                     bankname,
                     accountnumber,
                     signupemail,
+                    cardnumber,
                     amountlength
                 });
                 console.log(response.data);
@@ -199,22 +225,30 @@ const BankDetail = () => {
                         placeholder='Enter the Account Holder Email'
                         style={{ fontSize: 20 }}
                         value={route.params.email}
-                       ></TextInput>
+                    ></TextInput>
                 </View>
 
-                {/* View for displaying the email warning */}
-                {/* <View style={styles.warningview}>
+                <View style={styles.bankname}>
+
+                    <TextInput
+                        placeholder='Enter the Card Number'
+                        style={{ fontSize: 20 }}
+                        onChangeText={(cardnumber) => setcardnumber(cardnumber)}></TextInput>
+                </View>
+
+                {/* View for displaying the card number warning */}
+                <View style={styles.warningview}>
                     {
-                        emaillength && (
-                            <Text style={styles.warningtxt}>*Please enter the email</Text>
+                        cardnumberlength && (
+                            <Text style={styles.warningtxt}>*Please enter the card number</Text>
                         )
                     }
                     {
-                        !emaillength && validemail && (
-                            <Text style={styles.warningtxt}>*Please enter the valid email</Text>
+                        validcardnumber && !cardnumberlength && (
+                            <Text style={styles.warningtxt}>*Invalid card number it should be equal to 16</Text>
                         )
                     }
-                </View> */}
+                </View>
 
                 <View style={styles.bankname}>
 

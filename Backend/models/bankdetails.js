@@ -12,6 +12,11 @@ signupemail:{
     type:String,
     require:true
 },
+cardnumber:{
+    type:Number,
+
+    require:true
+},
 amountlength:{
     type:Number,
 

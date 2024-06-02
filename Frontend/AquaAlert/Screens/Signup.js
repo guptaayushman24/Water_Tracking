@@ -228,7 +228,7 @@ const Signup = ({navigation}) => {
             setcardnumberlength(false);
         }
 
-        if (cardnumber.length > 0 && cardnumber.length < 16) {
+        if (cardnumber.length > 0 && cardnumber.length <= 16) {
             setvalidcardnumber(true);
         }
         else {
@@ -392,7 +392,7 @@ const Signup = ({navigation}) => {
                 </View>
             }
 
-            {/* Card Number Text Input */}
+            {/* Card Number Text Input
             <View>
                 <Text style={{ color: 'white', marginLeft: 20, marginTop: 10 }}>Card Number</Text>
             </View>
@@ -404,28 +404,28 @@ const Signup = ({navigation}) => {
                     value={cardnumber}
                     onChangeText={(cardnumber) => setcardnumber(cardnumber)}>
                 </TextInput>
-            </View>
+            </View> */}
 
 
 
             {
-                <View>
-                    {
-                        cardnumberlength && (
-                            <Text style={{ color: 'red', marginLeft: 10 }}>*Please enter the card number</Text>
-                        )
-                    }
-                    {
-                        validcardnumber && !cardnumberlength && (
-                            <Text style={{ color: 'red', marginLeft: 10 }}>*Invalid card number it should be equal to 16</Text>
-                        )
-                    }
-                    {
-                        !cardnumberlength && !validcardnumber && (
-                            <Text></Text>
-                        )
-                    }
-                </View>
+                // <View>
+                //     {
+                //         cardnumberlength && (
+                //             <Text style={{ color: 'red', marginLeft: 10 }}>*Please enter the card number</Text>
+                //         )
+                //     }
+                //     {
+                //         validcardnumber && !cardnumberlength && (
+                //             <Text style={{ color: 'red', marginLeft: 10 }}>*Invalid card number it should be equal to 16</Text>
+                //         )
+                //     }
+                //     {
+                //         !cardnumberlength && !validcardnumber && (
+                //             <Text></Text>
+                //         )
+                //     }
+                // </View>
             }
 
             <LinearGradient colors={colors} style={styles.submitbtn}>
