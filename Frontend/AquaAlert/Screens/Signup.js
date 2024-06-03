@@ -79,6 +79,7 @@ const Signup = ({navigation}) => {
             try {
                 const response = await axios.get('http://10.0.2.2:5000/signup/usersignupdetail');
                 setstoredata(response.data);
+                console.log(storedata);
             }
 
             catch (err) {
