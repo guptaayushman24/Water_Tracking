@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import axios from 'axios'
 import { SafeAreaView, StyleSheet, Text, TouchableOpacity, View, TextInput } from 'react-native';
+
 const AddMoney = () => {
 
     const [accountnumber, setaccountnumber] = useState('');
@@ -12,14 +13,23 @@ const AddMoney = () => {
     const [validaccountnumber, setvalidaccountnumber] = useState(false);
 
     const [amountlength, setamountlength] = useState('');
-
     const [amount, setamount] = useState(false);
 
     const [validamount, setvalidamount] = useState(false);
 
     const [fetchbankdetail,setfetchbankdetail] = useState([]);
+    const [fetchamount,setfetchamount] = useState([]);
 
     const [bankname, setBankname] = useState('');
+    const [match,setmatch] = useState(false);
+
+    // Checking the accountnumber is present or not
+    const [update,setupdate] = useState('');
+    //  Storing the index where account number is found
+    const [index,updateindex] = useState(-1);
+    // Storing the amount on the particular index
+    const [curramount,setcurramount] = useState(0);
+
     const checkdetails = async () => {
         if (amountlength.length == 0) {
             setamount(true);
@@ -67,7 +77,7 @@ const AddMoney = () => {
 
         if (amountlength.length == 0) {
             setamount(true);
-            console.log(amount.length);
+            // console.log(amount.length);
         }
         else {
             console.log('Hello')
@@ -86,7 +96,6 @@ const AddMoney = () => {
 
         // Adding the money on the basis of the account number
         let sum = 0;
-        // async function data(){
             try{
                 const response =  await axios.get('http://10.0.2.2:5000/bank/bankdetailget');
                 setfetchbankdetail(response.data);
@@ -95,13 +104,46 @@ const AddMoney = () => {
             catch(err){
                 console.log(err);
             }
-        // }
-
-
-        // Iterating on the fetchbankdetail list
-        fetchbankdetail.forEach();
-
+            try{
+                const response =  await axios.get('http://10.0.2.2:5000/bank/bankdetailgetamount');
+                setfetchamount(response.data);
+                console.log(fetchamount);
+            }
+            catch(err){
+                console.log(err);
+            }
+        console.log(accountnumber);
+        for (let i=0;i<fetchbankdetail.length;i++){
+            if (parseInt(accountnumber)===fetchbankdetail[i].accountnumber){
+                console.log("Hello if")
+               updateindex(i);
+                setmatch(true);
+            }
         }
+        // for (let i=0;i<fetchbankdetail.length;i++){
+        //     console.log(fetchbankdetail[i].accountnumber);
+        // }
+        console.log(index);
+        // if (index!=-1){
+        //     let new_amount = parseInt(fetchamount[index])+parseInt(amountlength);
+        //     setcurramount(new_amount);
+
+        // }
+        // console.log(index);
+
+        // try{
+        //    if (match){
+        //     axios.post('http://10.0.2.2:5000/bank/bankdetailupdate',{
+        //         update,
+        //         curramount
+        //     })
+        //    }
+        // }
+        // catch(err){
+        //     console.log(err);
+        // }
+        }
+
     return (
         <View style={styles.main}>
             {/* Heading View */}

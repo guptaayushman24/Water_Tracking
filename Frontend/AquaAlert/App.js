@@ -16,7 +16,7 @@ export default function App() {
   const Stack = createNativeStackNavigator();
 
 
-  const Tab = createBottomTabNavigator();
+  // const Tab = createBottomTabNavigator();
   // function HomeTabs() {
 
   //   return (
