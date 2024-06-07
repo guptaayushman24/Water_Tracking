@@ -51,7 +51,7 @@ router.post('/bankdetailupdate',async (req,res)=>{
          res.status(200).send('Update successful');
        }
 
-       console.log(result);
+       console.log(response);
    }
    catch(err){
       console.log(err);

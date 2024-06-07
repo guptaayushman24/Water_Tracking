@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import axios from 'axios'
 import { SafeAreaView, StyleSheet, Text, TouchableOpacity, View, TextInput } from 'react-native';
 
-const AddMoney = () => {
+const AddMoney =  () => {
 
     const [accountnumber, setaccountnumber] = useState('');
 
@@ -28,119 +28,129 @@ const AddMoney = () => {
     // Storing the amount on the particular index
     const [curramount,setcurramount] = useState(0);
 
-    const checkdetails = async () => {
-        if (amountlength.length == 0) {
-            setamount(true);
-            console.log(amount.length);
-        }
-        else {
-            console.log('Hello')
-            setamount(false);
 
-        }
-
-        if (parseInt(amountlength) >= 100 && parseInt(amountlength) <= 50000) {
-            console.log(parseInt(amountlength));
-            setvalidamount(false);
-        }
-        else {
-            setvalidamount(true);
-        }
-
-        if (accountnumber.length == 0) {
-            setaccountnumberlength(true);
-
-        }
-        else {
-            setaccountnumberlength(false);
-            temp2 = 1;
-        }
-
-        var flag = 0;
-        for (var i = 0; i < accountnumber.length; i++) {
-            if (accountnumber.charAt(i) >= '0' && accountnumber.charAt(i) <= '9' && accountnumber.length >= 9 && accountnumber.length <= 18) {
-                continue;
+        const checkdetails = async () => {
+            if (amountlength.length == 0) {
+                setamount(true);
+                console.log(amount.length);
             }
             else {
-                flag = 1;
-                break;
+                console.log('Hello')
+                setamount(false);
+
             }
-        }
-        if (flag == 1) {
-            setvalidaccountnumber(true);
-        }
-        else {
-            setvalidaccountnumber(false);
-        }
 
-        if (amountlength.length == 0) {
-            setamount(true);
-            // console.log(amount.length);
-        }
-        else {
-            console.log('Hello')
-            setamount(false);
+            if (parseInt(amountlength) >= 100 && parseInt(amountlength) <= 50000) {
+                console.log(parseInt(amountlength));
+                setvalidamount(false);
+            }
+            else {
+                setvalidamount(true);
+            }
 
-        }
+            if (accountnumber.length == 0) {
+                setaccountnumberlength(true);
 
-        if (parseInt(amountlength) >= 100 && parseInt(amountlength) <= 50000) {
-            console.log(parseInt(amountlength));
-            setvalidamount(false);
-            temp4 = 1;
-        }
-        else {
-            setvalidamount(true);
-        }
+            }
+            else {
+                setaccountnumberlength(false);
+                temp2 = 1;
+            }
 
-        // Adding the money on the basis of the account number
-        let sum = 0;
-        let new_index = -1;
+            var flag = 0;
+            for (var i = 0; i < accountnumber.length; i++) {
+                if (accountnumber.charAt(i) >= '0' && accountnumber.charAt(i) <= '9' && accountnumber.length >= 9 && accountnumber.length <= 18) {
+                    continue;
+                }
+                else {
+                    flag = 1;
+                    break;
+                }
+            }
+            if (flag == 1) {
+                setvalidaccountnumber(true);
+            }
+            else {
+                setvalidaccountnumber(false);
+            }
+
+            if (amountlength.length == 0) {
+                setamount(true);
+                // console.log(amount.length);
+            }
+            else {
+                console.log('Hello')
+                setamount(false);
+
+            }
+
+            if (parseInt(amountlength) >= 100 && parseInt(amountlength) <= 50000) {
+                console.log(parseInt(amountlength));
+                setvalidamount(false);
+                temp4 = 1;
+            }
+            else {
+                setvalidamount(true);
+            }
+
+            // Adding the money on the basis of the account number
+            let sum = 0;
+            let new_index = -1;
+
+
+
+                  try {
+                    const response = await axios.get('http://10.0.2.2:5000/bank/bankdetailget');
+                    setfetchbankdetail(response.data);
+                  } catch (err) {
+                    console.log(err);
+                  }
+
+                try{
+                    const response =   await axios.get('http://10.0.2.2:5000/bank/bankdetailgetamount');
+                    // console.log(response.data);
+                    setfetchamount(response.data);
+
+                }
+                catch(err){
+                    console.log(err);
+                }
+
+            console.log('Account Number is ',accountnumber);
+            console.log('All the amount is ',fetchamount);
+            console.log('All the account number is',fetchbankdetail);
+
+            //  console.log(fetchamount);
+            for (let i=0;i<fetchbankdetail.length;i++){
+                if (accountnumber.toString()==fetchbankdetail[i].accountnumber.toString()){
+                   new_index = i;
+                    setmatch(true);
+                }
+            }
+            for (let i=0;i<fetchbankdetail.length;i++){
+                console.log(fetchbankdetail[i].accountnumber);
+            }
+
+            console.log(new_index);
+            let new_amount = 0;
+            if (new_index!=-1){
+                new_amount= new_amount+curramount+fetchamount[new_index].amountlength+parseInt(amountlength)
+
+            }
+            console.log(new_amount);
+
             try{
-                const response =  await axios.get('http://10.0.2.2:5000/bank/bankdetailget');
-                setfetchbankdetail(response.data);
-                console.log(fetchbankdetail);
+               if (match && new_index!=-1){
+                axios.post('http://10.0.2.2:5000/bank/bankdetailupdate',{
+                    accountnumber,
+                    amountlength:new_amount
+                })
+               }
             }
             catch(err){
                 console.log(err);
             }
-            try{
-                const response =  await axios.get('http://10.0.2.2:5000/bank/bankdetailgetamount');
-                setfetchamount(response.data);
-                console.log(fetchamount);
             }
-            catch(err){
-                console.log(err);
-            }
-        console.log(accountnumber);
-        for (let i=0;i<fetchbankdetail.length;i++){
-            if (accountnumber.toString()==fetchbankdetail[i].accountnumber.toString()){
-               new_index = i;
-                setmatch(true);
-            }
-        }
-        // for (let i=0;i<fetchbankdetail.length;i++){
-        //     console.log(fetchbankdetail[i].accountnumber);
-        // }
-        console.log(new_index);
-        // if (index!=-1){
-        //     let new_amount = parseInt(fetchamount[index])+parseInt(amountlength);
-        //     setcurramount(new_amount);
-
-        // }
-        // console.log(index);
-
-        // try{
-        //    if (match){
-        //     axios.post('http://10.0.2.2:5000/bank/bankdetailupdate',{
-        //         update,
-        //         curramount
-        //     })
-        //    }
-        // }
-        // catch(err){
-        //     console.log(err);
-        // }
-        }
 
     return (
         <View style={styles.main}>
