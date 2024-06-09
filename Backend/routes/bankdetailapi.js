@@ -38,7 +38,7 @@ router.get('/bankdetailgetamount',async(req,res)=>{
    }
 })
 
-router.post('/bankdetailupdate',async (req,res)=>{
+router.put('/bankdetailupdate',async (req,res)=>{
    const { accountnumber, amountlength } = req.body;
    try{
       const response = await bankdetailschema.updateOne(
