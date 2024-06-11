@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import { StyleSheet, Text, TextInput, View, Image, ImageBackground, TouchableOpacity, Animated, Ic } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient'
 import axios from 'axios'
-const Signin = ({navigation}) => {
+const Signin = ({ navigation }) => {
     // State for the setting the placeholder in name in textbox
     const [placeholdertext, Setplaceholdertext] = useState('Enter your email');
 
@@ -37,47 +37,67 @@ const Signin = ({navigation}) => {
     const colors = ['#ce4845', '#813e85'];
 
     // Stroing the data which is fetched from the mongodb
-    const [storedata,setstoredata] = useState([]);
+    const [storedata, setstoredata] = useState([]);
 
     // Stroing the emails which is fetched from the mongodb
-    const [storeemail,setstoreemail] = useState([]);
+    const [storeemail, setstoreemail] = useState([]);
 
     // Stroing the emails which is fetched from the mongodb
-    const [storepassword,setstorepassword] = useState([]);
+    const [storepassword, setstorepassword] = useState([]);
+
+    const [name, setname] = useState([]);
+
+    // Index for storing detecting the name
+    const[index,setindex] = useState(-1);
+
+    const [user_name,setuser_name] = useState('');
 
     // If user exist then maintaing that state we are using these state
-    const [matchfound,setmatchfound] = useState(true);
+    const [matchfound, setmatchfound] = useState(true);
 
-     // Fetching the signup data from the mongodb
-     useEffect(()=>{
-        const Detail= async()=>{
-            try{
-               const response =  await axios.get('http://10.0.2.2:5000/signup/usersignupdetail');
+    // Fetching the signup data from the mongodb
+    useEffect(() => {
+        const Detail = async () => {
+            try {
+                const response = await axios.get('http://10.0.2.2:5000/signup/usersignupdetail');
                 setstoredata(response.data);
                 // To log passwords of each user
                 // Store all the password in one list same do for the email and then try to authenticate
 
                 const emails = response.data.map(user => user.email);
                 const passwords = response.data.map(user => user.password);
+                const name = response.data.map(user => user.username);
 
                 setstoreemail(emails);
                 setstorepassword(passwords);
+                setname(name);
 
                 console.log(emails); // List of all emails
                 console.log(passwords); // List of all passwords
+                console.log(name);
+
+
+                // var user_name = "";
+                for (let i=0;i<emails.length;i++){
+                    console.log(email);
+                    if (emails[i].toString()===email.toString()){
+                        console.log("Hello if");
+                        setindex(i);
+                        break;
+                    }
+                }
+                console.log("Index",index);
+                console.log("Name on the particular index is",name[index]);
+                setuser_name(name[index]);
+                console.log("The name of the user is ",user_name);
             }
 
-            catch(err){
+            catch (err) {
                 console.log(err);
             }
         }
         Detail();
-    },[]);
-    // useEffect(() => {
-    //     if (matchfound) {
-    //         navigation.navigate('HomePage');
-    //     }
-    // }, [matchfound]);
+    },[index,email,user_name]);
 
 
 
@@ -110,14 +130,14 @@ const Signin = ({navigation}) => {
 
     // Checking the details that are filled by the user are valid or not
     var temp1 = 0;
-    var temp2=0;
-    var temp3=0;
-    var temp4=0;
+    var temp2 = 0;
+    var temp3 = 0;
+    var temp4 = 0;
     const checkdetails = () => {
         if (email.length == 0) {
             console.log('Please enter the email');
             setemailwarning(true);
-            temp1=1
+            temp1 = 1
         }
         else {
             setemailwarning(false);
@@ -138,7 +158,7 @@ const Signin = ({navigation}) => {
         // Checking if the user has enterd the password or not
         if (password.length == 0) {
             setpasswordwarning(true);
-            temp3=1;
+            temp3 = 1;
         }
         else {
             setpasswordwarning(false);
@@ -149,7 +169,7 @@ const Signin = ({navigation}) => {
         let check2 = 0;
         let check3 = 0;
         for (let i = 0; i < password.length; i++) {
-            if (password.charAt(i) >= 'a' && password.charAt(i) <= 'z' || password.charAt(i)>='A' && password.charAt(i)<='Z') {
+            if (password.charAt(i) >= 'a' && password.charAt(i) <= 'z' || password.charAt(i) >= 'A' && password.charAt(i) <= 'Z') {
                 check1 = 1;
             }
             else if (password.charAt(i) >= '0' && password.charAt(i) <= '9') {
@@ -165,7 +185,7 @@ const Signin = ({navigation}) => {
         }
         else {
             setvalidpassword(true);
-            temp4=1;
+            temp4 = 1;
         }
         console.log(temp1)
         console.log(temp2)
@@ -173,15 +193,16 @@ const Signin = ({navigation}) => {
         console.log(temp4)
 
 
-        if (temp1==0 && temp2==1 && temp3==0 && temp4==0){
-        const isMatch = storedata.some(detail => detail.email === email && detail.password === password);
-         setmatchfound(isMatch);
+        if (temp1 == 0 && temp2 == 1 && temp3 == 0 && temp4 == 0) {
+            const isMatch = storedata.some(detail => detail.email === email && detail.password === password);
+            setmatchfound(isMatch);
 
-         if (isMatch) {
-            navigation.navigate('HomePage');
-        } else {
-            console.log('No match found');
-        }
+            if (isMatch && index!=-1) {
+                console.log("User name inside if",user_name);
+                navigation.navigate('HomePage',{user_name:user_name});
+            } else {
+                console.log('No match found');
+            }
         }
     }
 
@@ -220,15 +241,15 @@ const Signin = ({navigation}) => {
 
             {/*Email Warning*/}
             {
-                    emailwarning && (
-                        <View><Text style={styles.warningname}>*Please enter the email address</Text></View>
-                    )
-                }
-                {
-                !validemail && !emailwarning &&  (
-                        <View><Text style={styles.warningname}>*Please enter the valid email address</Text></View>
-                    )
-                }
+                emailwarning && (
+                    <View><Text style={styles.warningname}>*Please enter the email address</Text></View>
+                )
+            }
+            {
+                !validemail && !emailwarning && (
+                    <View><Text style={styles.warningname}>*Please enter the valid email address</Text></View>
+                )
+            }
 
             {/* Password View*/}
             <View style={styles.detailsview}>
@@ -281,7 +302,7 @@ const Signin = ({navigation}) => {
             <View>
                 {/* If length of email is zero then do not show the below line try once */}
                 {
-                    !matchfound  && (
+                    !matchfound && (
                         <Text style={styles.warning}>*Account does not exist please sign up</Text>
                     )
                 }
@@ -293,7 +314,7 @@ const Signin = ({navigation}) => {
                 <View style={{ marginLeft: "25%" }}>
                     <Text style={styles.txtbottom}>Don't have an account?</Text>
                 </View>
-                <View style={{ marginStart: 10 }}><TouchableOpacity onPress={()=>navigation.navigate('SignUpScreen')}><Text style={{ color: 'white', fontSize: 15 }}>Sign Up</Text></TouchableOpacity></View>
+                <View style={{ marginStart: 10 }}><TouchableOpacity onPress={() => navigation.navigate('SignUpScreen')}><Text style={{ color: 'white', fontSize: 15 }}>Sign Up</Text></TouchableOpacity></View>
             </View>
 
         </View>
@@ -410,10 +431,10 @@ const styles = StyleSheet.create({
         margin: 2,
         color: '#535353'
     },
-    warning:{
-        color:'red',
-        fontSize:20,
-        marginLeft:20
+    warning: {
+        color: 'red',
+        fontSize: 20,
+        marginLeft: 20
     }
 
 })

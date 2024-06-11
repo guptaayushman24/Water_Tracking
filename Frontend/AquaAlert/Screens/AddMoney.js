@@ -44,6 +44,9 @@ const AddMoney = () => {
         setmatch(true);
         break;
       }
+      else{
+        setmatch(false);
+      }
     }
 
 
@@ -88,21 +91,6 @@ const AddMoney = () => {
     } else {
       setvalidaccountnumber(false);
     }
-
-    // let new_index = -1;
-    // for (let i = 0; i < fetchbankdetail.length; i++) {
-    //   if (accountnumber.toString() === fetchbankdetail[i].accountnumber.toString()) {
-    //     new_index = i;
-    //     setmatch(true);
-    //     break;
-    //   }
-    // }
-
-    // let new_amount = 0;
-    // if (new_index !== -1) {
-    //   new_amount = fetchamount[new_index].amountlength + parseInt(amountlength);
-    //   setcurramount(new_amount);
-    // }
 
     try {
       if (match && new_index !== -1) {
@@ -152,6 +140,14 @@ const AddMoney = () => {
         <TouchableOpacity onPress={checkdetails}>
           <Text style={styles.submittxt}>Add Money</Text>
         </TouchableOpacity>
+      </View>
+
+      <View style={styles.warningview}>
+        {/* {
+          match && !accountnumberlength && !amountlength && (
+            <Text style={styles.warningtxt}>*Account does not exist</Text>
+          )
+        } */}
       </View>
     </SafeAreaView>
   );

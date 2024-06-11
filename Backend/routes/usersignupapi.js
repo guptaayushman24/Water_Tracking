@@ -13,7 +13,6 @@ router.post('/usersignupapi', async (req, res) => {
         console.log('Data is saved in the mongodb');
         res.status(200).json(user);
     }
-
     catch (err) {
 
         console.log(err);
@@ -34,4 +33,15 @@ router.get('/usersignupdetail', async (req, res) => {
         console.log(err);
     }
 })
+// Creating the get request that will only give the username
+try{
+    router.get('/name',async(req,res)=>{
+        const  name= await signupschema.find({},{username:1,_id:0});
+        res.status(200).json(name);
+        console.log(name);
+    })
+}
+catch(err){
+    console.log(err);
+}
 module.exports = router;
