@@ -1,8 +1,10 @@
 import { useEffect, useState } from 'react';
 import { StyleSheet, Text, TextInput, View, Image, ImageBackground, TouchableOpacity, Animated, Ic } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient'
+import { useNavigation } from '@react-navigation/native';
 import axios from 'axios'
-const Signin = ({ navigation }) => {
+const Signin = () => {
+    const navigation = useNavigation();
     // State for the setting the placeholder in name in textbox
     const [placeholdertext, Setplaceholdertext] = useState('Enter your email');
 
@@ -12,6 +14,7 @@ const Signin = ({ navigation }) => {
     const [emailwarning, setemailwarning] = useState(false);
 
     // State for displaying the warning if user has entered the invalid email
+
     const [validemail, setvalidemail] = useState(false);
 
 
@@ -48,14 +51,12 @@ const Signin = ({ navigation }) => {
     const [name, setname] = useState([]);
 
     // Index for storing detecting the name
-    const[index,setindex] = useState(-1);
+    const [index, setindex] = useState(-1);
 
-    const [user_name,setuser_name] = useState('');
+    const [user_name, setuser_name] = useState('');
 
     // If user exist then maintaing that state we are using these state
     const [matchfound, setmatchfound] = useState(true);
-
-    // Fetching the signup data from the mongodb
     useEffect(() => {
         const Detail = async () => {
             try {
@@ -78,18 +79,19 @@ const Signin = ({ navigation }) => {
 
 
                 // var user_name = "";
-                for (let i=0;i<emails.length;i++){
+                for (let i = 0; i < emails.length; i++) {
                     console.log(email);
-                    if (emails[i].toString()===email.toString()){
+                    if (emails[i].toString() === email.toString()) {
                         console.log("Hello if");
                         setindex(i);
                         break;
                     }
                 }
-                console.log("Index",index);
-                console.log("Name on the particular index is",name[index]);
+                console.log("Index", index);
+                console.log("Name on the particular index is", name[index]);
                 setuser_name(name[index]);
-                console.log("The name of the user is ",user_name);
+
+
             }
 
             catch (err) {
@@ -97,7 +99,7 @@ const Signin = ({ navigation }) => {
             }
         }
         Detail();
-    },[index,email,user_name]);
+    }, [index, email]);
 
 
 
@@ -196,14 +198,27 @@ const Signin = ({ navigation }) => {
         if (temp1 == 0 && temp2 == 1 && temp3 == 0 && temp4 == 0) {
             const isMatch = storedata.some(detail => detail.email === email && detail.password === password);
             setmatchfound(isMatch);
-
-            if (isMatch && index!=-1) {
-                console.log("User name inside if",user_name);
-                navigation.navigate('HomePage',{user_name:user_name});
+            console.log(user_name);
+            if (isMatch && index != -1) {
+            var  str = "";
+                str = user_name;
+                // console.log("Name of the user just inside navigation",user_name);
+                console.log("Navigation",user_name);
+                if (isMatch && index != -1) {
+                    console.log("The str name is",str);
+                    navigation.navigate('HomePage', {'user_name':user_name });
+                } else {
+                    console.log('No match found');
+                }
             } else {
                 console.log('No match found');
             }
         }
+        // navigation.navigate('Root', {
+        //     screen: 'Settings',
+        //     params: { user: 'jane' },
+        //   });
+
     }
 
 

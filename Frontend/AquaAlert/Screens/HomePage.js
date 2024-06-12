@@ -2,21 +2,34 @@ import { SafeAreaView, StyleSheet, Text, TouchableOpacity, View } from 'react-na
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { NavigationContainer } from '@react-navigation/native';
 import { useRoute } from '@react-navigation/native';
+import { Drawer } from 'react-native-paper';
 import Wallet from './Wallet';
 import Report from './Report';
 import Account from './Account';
 import AddMoney from './AddMoney';
+import Signin from './Signin';
+const Tab = createBottomTabNavigator();
 const HomePage = () => {
+        <Tab.Navigator initialRouteName='HomePage'>
+          <Tab.Screen name="Profile" component={Wallet} options={{headerShown:false}} />
+           <Tab.Screen name="Report" component={Report} options={{headerShown:false}}/>
+
+
+           <Tab.Screen name="Account" component={Account} options={{headerShown:false}} />
+         </Tab.Navigator>
     const route = useRoute();
-    // console.log("Fetched in the Home Screen",route.params.user_name);
+    const name = route.params.user_name;
+    console.log("Name in the HomePage",name);
     return (
 
       <View style={styles.main}>
+
             <View style={styles.header}>
                 <View style={styles.userdetail}>
 
+
                 <View><Text>Good Morning!</Text></View>
-                <View><Text style={{fontWeight:'bold',fontSize:18}}>abcde efgh</Text></View>
+                <View><Text style={{fontWeight:'bold',fontSize:18}}>{route.params.user_name}</Text></View>
 
                 </View>
             </View>
