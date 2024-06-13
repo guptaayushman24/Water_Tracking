@@ -1,6 +1,6 @@
 import { SafeAreaView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import { NavigationContainer } from '@react-navigation/native';
+import { NavigationContainer, useNavigation } from '@react-navigation/native';
 import { useRoute } from '@react-navigation/native';
 import Wallet from './Wallet';
 import Report from './Report';
@@ -8,9 +8,11 @@ import Account from './Account';
 import AddMoney from './AddMoney';
 import Signin from './Signin';
 const HomePage = () => {
+    const navigation = useNavigation();
     const route = useRoute();
     const name = route.params;
     console.log("Name in the HomePage",name.user_name);
+
 
 
     return (
@@ -50,7 +52,7 @@ const HomePage = () => {
             </View>
             <View style={styles.lowerbtn}>
             <View style={styles.deposit}>
-                    <TouchableOpacity><Text style={{textAlign:"center",marginTop:10,fontSize:18}}>Deposit</Text></TouchableOpacity>
+                    <TouchableOpacity onPress={()=>navigation.navigate('AddMoney')}><Text style={{textAlign:"center",marginTop:10,fontSize:18}}>Deposit</Text></TouchableOpacity>
                 </View>
                 <View style={styles.withdraw}>
                     <TouchableOpacity><Text style={{textAlign:"center",marginTop:10,fontSize:18}}>Withdraw</Text></TouchableOpacity>

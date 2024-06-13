@@ -46,6 +46,7 @@ const AddMoney = () => {
       }
       else{
         setmatch(false);
+        console.log("Account number do not found");
       }
     }
 
@@ -143,11 +144,11 @@ const AddMoney = () => {
       </View>
 
       <View style={styles.warningview}>
-        {/* {
-          match && !accountnumberlength && !amountlength && (
+        {
+          !match && !validaccountnumber && !validamount &&(
             <Text style={styles.warningtxt}>*Account does not exist</Text>
           )
-        } */}
+        }
       </View>
     </SafeAreaView>
   );

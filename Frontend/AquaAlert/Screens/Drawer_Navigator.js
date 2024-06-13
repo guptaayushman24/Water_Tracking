@@ -7,8 +7,8 @@
 
 // const DrawerNavigator = () => {
 //     return (
-//         <Drawer.Navigator>
-//         <Drawer.Screen name='HomePage' component={HomePage} options={{headerShown:false}}/>
+//         <Drawer.Navigator initialRouteName='Home'>
+//         <Drawer.Screen name='Home' component={HomePage} options={{headerShown:false}}/>
 //         <Drawer.Screen name="AddMoney" component={AddMoney} options={{headerShown:false}} />
 //         </Drawer.Navigator>
 //     );

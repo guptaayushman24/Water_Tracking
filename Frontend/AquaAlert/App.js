@@ -30,6 +30,7 @@ export default function App() {
       <Stack.Screen name='SignUpScreen' component={Signup} options={{headerShown:false}}/>
         <Stack.Screen name='HomePage' component={HomeTabs} options={{headerShown:false}}/>
         <Stack.Screen name='BankDetail' component={BankDetail} options={{headerShown:false}}/>
+        <Stack.Screen name='AddMoney' component={AddMoney} options={{headerShown:false}}/>
       </Stack.Navigator>
 
 
