@@ -11,24 +11,12 @@ import Wallet from './Screens/Account';
 import Report from './Screens/Account';
 import BankDetail from './Screens/BankDetail'
 import AddMoney from './Screens/AddMoney';
-import Drawer from './component/DrawerNavigation';
+import HomeTabs from './Screens/HomeTabs';
+const Stack = createNativeStackNavigator();
+
+
 export default function App() {
-  const Stack = createNativeStackNavigator();
 
-
-  const Tab = createBottomTabNavigator();
-  function HomeTabs() {
-
-    return (
-
-     <Tab.Navigator>
-        <Tab.Screen name="Home" component={Drawer} options={{headerShown:false}}></Tab.Screen>
-        <Tab.Screen name="Profile" component={Wallet} options={{headerShown:false}} />
-        <Tab.Screen name="Report" component={Report} options={{headerShown:false}}/>
-        <Tab.Screen name="Account" component={Account} options={{headerShown:false}} />
-      </Tab.Navigator>
-    );
-  }
   return (
 
 
@@ -40,7 +28,7 @@ export default function App() {
 
        <Stack.Screen name='SignInScreen' component={Signin} options={{headerShown:false}}/>
       <Stack.Screen name='SignUpScreen' component={Signup} options={{headerShown:false}}/>
-        <Stack.Screen name='HomePage' component={HomePage} options={{headerShown:false}}/>
+        <Stack.Screen name='HomePage' component={HomeTabs} options={{headerShown:false}}/>
         <Stack.Screen name='BankDetail' component={BankDetail} options={{headerShown:false}}/>
       </Stack.Navigator>
 
@@ -51,6 +39,7 @@ export default function App() {
     // <Signin></Signin>
     // <BankDetail></BankDetail>
     // <AddMoney></AddMoney>
+
 
 
 )};

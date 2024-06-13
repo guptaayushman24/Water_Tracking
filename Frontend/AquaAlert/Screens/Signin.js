@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import { StyleSheet, Text, TextInput, View, Image, ImageBackground, TouchableOpacity, Animated, Ic } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient'
 import { useNavigation } from '@react-navigation/native';
+import HomePage from './HomePage';
 import axios from 'axios'
 const Signin = () => {
     const navigation = useNavigation();
@@ -12,6 +13,7 @@ const Signin = () => {
     const [email, setemail] = useState('');
     // State for displaying the warning if user did not enterd any email
     const [emailwarning, setemailwarning] = useState(false);
+
 
     // State for displaying the warning if user has entered the invalid email
 
@@ -200,13 +202,13 @@ const Signin = () => {
             setmatchfound(isMatch);
             console.log(user_name);
             if (isMatch && index != -1) {
-            var  str = "";
-                str = user_name;
-                // console.log("Name of the user just inside navigation",user_name);
                 console.log("Navigation",user_name);
-                if (isMatch && index != -1) {
-                    console.log("The str name is",str);
-                    navigation.navigate('HomePage', {'user_name':user_name });
+                if (isMatch && index != -1){
+                    // navigation.navigate('HomePage', {'user_name':user_name });
+                    navigation.navigate('HomePage', {
+                        screen: 'Home', // Ensure this matches the Tab.Screen name
+                        params: { user_name: user_name }
+                      });
                 } else {
                     console.log('No match found');
                 }
@@ -214,10 +216,6 @@ const Signin = () => {
                 console.log('No match found');
             }
         }
-        // navigation.navigate('Root', {
-        //     screen: 'Settings',
-        //     params: { user: 'jane' },
-        //   });
 
     }
 
