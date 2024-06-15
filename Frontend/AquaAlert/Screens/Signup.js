@@ -256,7 +256,7 @@ const Signup = ({navigation}) => {
                 console.log(response.data);
                 setuserregisterd(true);
                 console.log(userregistered);
-                navigation.navigate('BankDetail', { email: email });
+                navigation.navigate('BankDetail', { email: email});
                 console.log("Hello");
             }
             catch (err) {

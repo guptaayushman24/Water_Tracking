@@ -4,12 +4,16 @@ import { LinearGradient } from 'expo-linear-gradient'
 import { useRoute } from '@react-navigation/native';
 import axios from 'axios';
 
-const BankDetail = () => {
+const BankDetail = ({navigation}) => {
+    // const [storeemail,setstoreemail] = useState('');
     const route = useRoute();
     const signupemail = route.params.email
     console.log(signupemail);
+    // setstoreemail(storeemail);
     // Storing the bank name in the variable
     const [bankname, setbankname] = useState('');
+
+
 
     // Storing the bank account number in the variable
     const [accountnumber, setaccountnumber] = useState('');
@@ -79,6 +83,10 @@ const BankDetail = () => {
         else {
             setaccountnumberlength(false);
             temp2 = 1;
+        }
+
+        if (temp1==1 && temp2==1){
+            navigation.navigate('WalletSignin',{signupemail});
         }
 
 
