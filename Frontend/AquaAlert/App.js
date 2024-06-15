@@ -42,7 +42,6 @@ export default function App() {
     // <AddMoney></AddMoney>
 
 
-
 )};
 
 const styles = StyleSheet.create({

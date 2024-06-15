@@ -12,7 +12,9 @@ const signupmodel = new mongoose.Schema({
     password:{
         type:String,
         require:true,
+        unique:true,
     },
+
 },{timestamps:true})
 
 

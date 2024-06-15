@@ -7,10 +7,12 @@ const bodyParser = require('body-parser');
 app.use(bodyParser.json());
 const usersignuproute = require('./routes/usersignupapi');
 const bankapi = require('./routes/bankdetailapi');
+const walletapi = require('./routes/walletapi');
 app.use('/signup',usersignuproute);
 app.use('/bank',bankapi);
+app.use('/wallet',walletapi);
 // Creating the lister where server will run
 app.listen(5000, () => {
-
     console.log('Server is running on the local host 5000');
+
 })

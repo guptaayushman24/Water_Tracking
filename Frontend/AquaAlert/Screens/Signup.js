@@ -65,6 +65,7 @@ const Signup = ({navigation}) => {
     const [clickcount, setclickcount] = useState(0);
 
     const [showwarning, setshowwarning] = useState(false);
+
     // If user exist then maintaing that state we are using these state
     const [matchfound, setmatchfound] = useState(false);
 
@@ -244,7 +245,7 @@ const Signup = ({navigation}) => {
         console.log(storedata);
         // }
 
-        if (isMatch == false && temp1 == 1 && temp2 == 1 && temp3 == 1 && temp4 == 1 && temp5 == 1 && temp6 != 1 && temp7 == 1) {
+        if (isMatch == false  && temp1 == 1 && temp2 == 1 && temp3 == 1 && temp4 == 1 && temp5 == 1 && temp6 != 1 && temp7 == 1) {
             try {
                 const response = await axios.post('http://10.0.2.2:5000/signup/usersignupapi', {
                     username,

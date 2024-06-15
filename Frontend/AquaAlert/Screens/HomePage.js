@@ -1,7 +1,9 @@
-import { SafeAreaView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { SafeAreaView, StyleSheet, Text, TouchableOpacity, View ,Modal,Pressable,TextInput} from 'react-native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { NavigationContainer, useNavigation } from '@react-navigation/native';
 import { useRoute } from '@react-navigation/native';
+import { useDeferredValue, useEffect, useState } from 'react';
+
 import Wallet from './Wallet';
 import Report from './Report';
 import Account from './Account';
@@ -13,11 +15,11 @@ const HomePage = () => {
     const name = route.params;
     console.log("Name in the HomePage",name.user_name);
 
+    const [modalVisible, setModalVisible] = useState(false);
 
 
     return (
-
-      <View style={styles.main}>
+        <View style={styles.main}>
             <View style={styles.header}>
                 <View style={styles.userdetail}>
 
@@ -43,8 +45,35 @@ const HomePage = () => {
             </View>
             <View style={styles.functionality}>
             <View style={styles.upperbtn}>
-                <View style={styles.addmoney}>
-                    <TouchableOpacity><Text style={{textAlign:"center",marginTop:10,fontSize:18,color:'white'}}>Add Money</Text></TouchableOpacity>
+                <View style={styles.centeredView}>
+                    {/* <TouchableOpacity><Text style={{textAlign:"center",marginTop:10,fontSize:18,color:'white'}}>Add Money</Text></TouchableOpacity> */}
+                    {/* <View style={styles.centeredView}> */}
+                    <Modal
+        animationType="slide"
+        transparent={true}
+        visible={modalVisible}
+        onRequestClose={() => {
+          Alert.alert('Modal has been closed.');
+          setModalVisible(!modalVisible);
+        }}>
+        <View style={styles.centeredView}>
+          <View style={styles.modalView}>
+            {/* <Text style={styles.modalText}>Hello World!</Text> */}
+            <TextInput placeholder='Enter the amount' style={{textAlign:'center'}}></TextInput>
+            <Pressable
+              style={[styles.button, styles.buttonClose]}
+              onPress={() => setModalVisible(!modalVisible)}>
+              <Text style={styles.textStylesubmit}>PROCEED TO TOPUP</Text>
+            </Pressable>
+          </View>
+        </View>
+      </Modal>
+      <Pressable
+        style={[styles.button, styles.buttonOpen]}
+        onPress={() => setModalVisible(true)}>
+        <Text style={styles.textStyle}>Add Money</Text>
+      </Pressable>
+
                 </View>
                 <View style={styles.transfermoney}>
                     <TouchableOpacity><Text style={{textAlign:"center",marginTop:10,fontSize:18,color:'white'}}>Transfer Money</Text></TouchableOpacity>
@@ -62,8 +91,9 @@ const HomePage = () => {
             <View style={styles.transactionhistory}></View>
         </View>
     )
-
 }
+
+
 export default HomePage;
 
 const styles = StyleSheet.create({
@@ -144,6 +174,56 @@ const styles = StyleSheet.create({
         width:150,
         height:48,
         borderRadius:20,
-    }
+    },
+    centeredView: {
+        flex: 1,
+        alignItems:"center",
+        marginTop: 25,
+      },
+      modalView: {
+        marginTop:115,
+        backgroundColor: 'white',
+        borderRadius: 20,
+        padding: 35,
+        alignItems: 'center',
+        shadowColor: '#000',
+        shadowOffset: {
+          width: 0,
+          height: 2,
+        },
+        shadowOpacity: 0.25,
+        shadowRadius: 4,
+        elevation: 5,
+      },
+      button: {
+        borderRadius: 20,
+        padding: 10,
+        elevation: 2,
+        width:150,
+        height:48
+      },
+      buttonOpen: {
+        backgroundColor: '#7b8afe',
+      },
+      buttonClose: {
+        backgroundColor: '#2196F3',
+      },
+      textStyle: {
+        color: 'white',
+        fontWeight: 'bold',
+        textAlign: 'center',
+        fontSize:18,
+      },
+      textStylesubmit:{
+        textAlign:"center",
+          marginTop:2,
+          color:'white',
+          fontWeight:'bold',
+          fontSize:13.5
+      },
+      modalText: {
+        marginBottom: 15,
+        textAlign: 'center',
+      }
 
 })
