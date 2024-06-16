@@ -85,9 +85,7 @@ const BankDetail = ({navigation}) => {
             temp2 = 1;
         }
 
-        if (temp1==1 && temp2==1){
-            navigation.navigate('WalletSignin',{signupemail});
-        }
+
 
 
 
@@ -171,6 +169,9 @@ const BankDetail = ({navigation}) => {
             catch (err) {
                 console.log(err);
             }
+        }
+        if (temp1==1 && temp2==1 && temp3==1 && temp4==1){
+            navigation.navigate('WalletSignin',{signupemail});
         }
     }
 

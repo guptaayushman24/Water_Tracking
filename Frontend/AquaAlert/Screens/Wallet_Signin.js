@@ -3,23 +3,65 @@ import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { NavigationContainer, useNavigation } from '@react-navigation/native';
 import { useRoute } from '@react-navigation/native';
 import { useDeferredValue, useEffect, useState } from 'react';
-
+import axios from 'axios';
 const Walletsign = () => {
+    const [storeemail, setstoreemail] = useState([]);
+    const [storeamount, setstoreamount] = useState([]);
+    const [index, setindex] = useState(-1);
+
     const route = useRoute();
     const email = route.params.signupemail;
-    console.log("Theses is the signup email in wallet",email);
+    console.log("Theses is the signup email in wallet", email);
     const [amountlength, setamountlength] = useState('');
     const [amount, setamount] = useState(false);
-    const checkdetails = () => {
+
+
+        const fetchdata = async () => {
+            try {
+                const responeseemail = await axios.get('http://10.0.2.2:5000/bank/bankdetailemailget');
+                setstoreemail(responeseemail.data);
+                console.log(responeseemail.data); // logging fetched data instead of state
+            } catch (err) {
+                console.log(err);
+            }
+
+            try {
+                const responseamount = await axios.get('http://10.0.2.2:5000/bank/bankdetailgetamount');
+                setstoreamount(responseamount.data);
+                console.log(responseamount.data); // logging fetched data instead of state
+            } catch (err) {
+                console.log(err);
+            }
+
+            for (var i = 0; i < storeemail.length; i++) {
+                console.log("Inside for loop");
+                if (email === storeemail[i].signupemail.toString()) {
+                    console.log("Inside if inside for loop")
+                    setindex(i);
+                    console.log(email);
+                    break;
+                }
+            }
+            if (index!=-1){
+                console.log("The amount associated with the email is",storeamount[index].amountlength);
+            }
+        };
+        useEffect(()=>{
+            fetchdata();
+        },[]);
+    const checkdetails = async () => {
         if (amountlength.length == 0) {
             setamount(true);
         }
-
         else {
             setamount(false);
+            await fetchdata();
         }
 
     }
+    console.log("Index", index);
+
+
 
     return (
 

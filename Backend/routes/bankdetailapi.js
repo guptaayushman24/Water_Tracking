@@ -26,6 +26,17 @@ router.get('/bankdetailget',async(req,res)=>{
       console.log(err);
    }
 })
+router.get('/bankdetailemailget',async(req,res)=>{
+   try{
+      const data = await bankdetailschema.find({},{signupemail:1,_id:0});
+      res.status(200).json(data);
+      console.log(data);
+   }
+   catch(err){
+      res.status(500).json({err:'Internal Server Error'});
+      console.log(err);
+   }
+})
 router.get('/bankdetailgetamount',async(req,res)=>{
    try{
       const data = await bankdetailschema.find({},{amountlength:1,_id:0});
