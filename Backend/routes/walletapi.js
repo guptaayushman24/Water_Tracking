@@ -2,7 +2,7 @@ const express = require('express');
 const router = express.Router();
 const walletschema = require('../models/wallet')
 
-router.post('/walletget',async (req,res)=>{
+router.post('/walletpost',async (req,res)=>{
     try{
         const data = req.body;
         const response = await walletschema(data).save();

@@ -8,11 +8,11 @@ const Walletsign = () => {
     const [storeemail, setstoreemail] = useState([]);
     const [storeamount, setstoreamount] = useState([]);
     const [index, setindex] = useState(-1);
-
+    const [updateamount,setupdateamount] = useState('');
     const route = useRoute();
     const email = route.params.signupemail;
     console.log("Theses is the signup email in wallet", email);
-    const [amountlength, setamountlength] = useState('');
+    const [amountlength, setamountlength] = useState(0);
     const [amount, setamount] = useState(false);
 
 
@@ -45,6 +45,25 @@ const Walletsign = () => {
             if (index!=-1){
                 console.log("The amount associated with the email is",storeamount[index].amountlength);
             }
+            // Adding the amount in the wallet if the amount is valid
+            // var newamount = -1;
+            if (storeamount[index].amountlength>=amountlength){
+                const newamount = storeamount[index].amountlength-amountlength;
+                setupdateamount(newamount);
+                console.log("New amount just above try",updateamount);
+                try{
+                    const response = await axios.post('http://10.0.2.2:5000/wallet/walletpost',{
+                        email,
+                        amountadded:amountlength
+                    })
+                    console.log("Data",response.data);
+                }
+                catch(err){
+                    console.log(err);
+                }
+            }
+            console.log(amountlength);
+
         };
         useEffect(()=>{
             fetchdata();
