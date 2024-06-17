@@ -12,12 +12,11 @@ const Walletsign = () => {
     const route = useRoute();
     const email = route.params.signupemail;
     console.log("Theses is the signup email in wallet", email);
-    const [amountlength, setamountlength] = useState(0);
+    const [amountlength, setamountlength] = useState('');
     const [amount, setamount] = useState(false);
 
-
-        const fetchdata = async () => {
-            try {
+    const fetchdata = async () => {
+        try {
                 const responeseemail = await axios.get('http://10.0.2.2:5000/bank/bankdetailemailget');
                 setstoreemail(responeseemail.data);
                 console.log(responeseemail.data); // logging fetched data instead of state
@@ -42,6 +41,7 @@ const Walletsign = () => {
                     break;
                 }
             }
+            console.log("Amount length above if",amountlength);
             if (index!=-1){
                 console.log("The amount associated with the email is",storeamount[index].amountlength);
             }
@@ -62,12 +62,12 @@ const Walletsign = () => {
                     console.log(err);
                 }
             }
-            console.log(amountlength);
+            console.log("Length of the amount is",amountlength);
 
         };
         useEffect(()=>{
             fetchdata();
-        },[]);
+        },[index]);
     const checkdetails = async () => {
         if (amountlength.length == 0) {
             setamount(true);
