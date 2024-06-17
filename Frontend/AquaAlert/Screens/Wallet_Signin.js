@@ -4,7 +4,7 @@ import { NavigationContainer, useNavigation } from '@react-navigation/native';
 import { useRoute } from '@react-navigation/native';
 import { useDeferredValue, useEffect, useState } from 'react';
 import axios from 'axios';
-const Walletsign = () => {
+const Walletsign = ({navigation}) => {
     const [storeemail, setstoreemail] = useState([]);
     const [storeamount, setstoreamount] = useState([]);
     const [index, setindex] = useState(-1);
@@ -49,6 +49,7 @@ const Walletsign = () => {
             // var newamount = -1;
             if (storeamount[index].amountlength>=amountlength){
                 const newamount = storeamount[index].amountlength-amountlength;
+                console.log('The new amount is',newamount);
                 setupdateamount(newamount);
                 console.log("New amount just above try",updateamount);
                 try{
@@ -57,6 +58,17 @@ const Walletsign = () => {
                         amountadded:amountlength
                     })
                     console.log("Data",response.data);
+                }
+                catch(err){
+                    console.log(err);
+                }
+                 // Updating the bank balance after adding the amount in wallet
+                try{
+                    await axios.put('http://10.0.2.2:5000/bank/bankdetailwalletupdate',{
+                        signupemail:email,
+                        amountlength:newamount
+                    })
+                    navigation.navigate('SignInScreen');
                 }
                 catch(err){
                     console.log(err);
