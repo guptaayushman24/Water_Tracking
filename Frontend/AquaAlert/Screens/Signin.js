@@ -57,6 +57,7 @@ const Signin = () => {
 
     const [user_name, setuser_name] = useState('');
 
+    const [cardnumber,setcardnumber] = useState([]);
     // If user exist then maintaing that state we are using these state
     const [matchfound, setmatchfound] = useState(true);
     useEffect(() => {
@@ -99,6 +100,17 @@ const Signin = () => {
             catch (err) {
                 console.log(err);
             }
+
+            // Fetch the bankdetails (cardnumber only)
+            try{
+                const response = await axios.get('http://10.0.2.2:5000/bank/bankdetailcardnumberget');
+                setcardnumber(response.data);
+            }
+            catch(err){
+                console.log(err);
+            }
+
+
         }
         Detail();
     }, [index, email]);
@@ -201,14 +213,25 @@ const Signin = () => {
             const isMatch = storedata.some(detail => detail.email === email && detail.password === password);
             setmatchfound(isMatch);
             console.log(user_name);
+            // for (let i=0;i<cardnumber.length;i++){
+            //     console.log("The cardnumber",cardnumber[i])
+            // }
+            console.log("The card number is",cardnumber[index]);
             if (isMatch && index != -1) {
                 console.log("Navigation",user_name);
                 if (isMatch && index != -1){
                     // navigation.navigate('HomePage', {'user_name':user_name });
                     navigation.navigate('HomePage', {
                         screen: 'Home', // Ensure this matches the Tab.Screen name
-                        params: { user_name: user_name }
+                        params:{ user_name:user_name,
+                            cardnumber:cardnumber[index]
+                        }
                       });
+
+                    //   navigation.navigate('HomePage',{
+                    //     screen:'Home',
+                    //     params:{cardnumber:cardnumber[index]}
+                    //   });
                 } else {
                     console.log('No match found');
                 }

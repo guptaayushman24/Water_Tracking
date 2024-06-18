@@ -29,10 +29,10 @@ export default function App() {
 
        <Stack.Screen name='SignInScreen' component={Signin} options={{headerShown:false}}/>
       <Stack.Screen name='SignUpScreen' component={Signup} options={{headerShown:false}}/>
-        <Stack.Screen name='HomePage' component={HomeTabs} options={{headerShown:false}}/>
+         <Stack.Screen name='HomePage' component={HomeTabs} options={{headerShown:false}}/>
         <Stack.Screen name='BankDetail' component={BankDetail} options={{headerShown:false}}/>
-        <Stack.Screen name='AddMoney' component={AddMoney} options={{headerShown:false}}/>
-        <Stack.Screen name='WalletSignin' component={Walletsign} options={{headerShown:false}}/>
+         <Stack.Screen name='AddMoney' component={AddMoney} options={{headerShown:false}}/>
+         <Stack.Screen name='WalletSignin' component={Walletsign} options={{headerShown:false}}/>
       </Stack.Navigator>
 
 

@@ -1,6 +1,7 @@
 const express = require('express');
 const router = express.Router();
-const walletschema = require('../models/wallet')
+const walletschema = require('../models/wallet');
+const { default: mongoose } = require('mongoose');
 
 router.post('/walletpost',async (req,res)=>{
     try{
@@ -15,4 +16,16 @@ router.post('/walletpost',async (req,res)=>{
     }
 })
 
+router.put('/walletupdate',async(req,res)=>{
+    const {email,amountadded} = req.body;
+    try{
+       const response = await walletschema.updateOne(
+        { email: email }, // Query to match the name
+        { $set: { amountadded: amountadded } } // Update the bankname field
+       )
+    }
+    catch(err){
+        console.log(err);
+    }
+})
 module.exports=router;

@@ -1,9 +1,9 @@
-import { SafeAreaView, StyleSheet, Text, TouchableOpacity, View ,Modal,Pressable,TextInput} from 'react-native';
+import { SafeAreaView, StyleSheet, Text, TouchableOpacity, View ,Modal,Pressable,TextInput,Alert} from 'react-native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import { NavigationContainer, useNavigation } from '@react-navigation/native';
+import { NavigationContainer, useNavigation} from '@react-navigation/native';
 import { useRoute } from '@react-navigation/native';
 import { useDeferredValue, useEffect, useState } from 'react';
-
+import axios from 'axios';
 import Wallet from './Wallet';
 import Report from './Report';
 import Account from './Account';
@@ -12,11 +12,32 @@ import Signin from './Signin';
 const HomePage = () => {
     const navigation = useNavigation();
     const route = useRoute();
-    const name = route.params;
-    console.log("Name in the HomePage",name.user_name);
+    // const route1 = useRoute();
+    // const name = route.params;
 
+
+    console.log("CardNumber in the HomePage",typeof route.params.cardnumber);
+    console.log("Route of username is",route);
+    console.log("Name in the Home Page is",typeof route.params.user_name);
+    // console.log("Card  Number is ",number.cardnumber);
+    console.log(route.params);
     const [modalVisible, setModalVisible] = useState(false);
-
+    const [storeemail,setstoreemail] = useState();
+     // Creating the component for the API
+     const fetchdetail=async ()=>{
+      try{
+        const response = await axios.get('http://10.0.2.2:5000/bank/bankdetailemailget');
+        setstoreemail(response.data);
+        console.log("Email fetched in the homepage",response.data);
+      }
+      catch(err){
+        console.log(err);
+      }
+     }
+    const closemodal=async ()=>{
+      setModalVisible(!modalVisible)
+      await fetchdetail();
+    }
 
     return (
         <View style={styles.main}>
@@ -25,7 +46,7 @@ const HomePage = () => {
 
 
                 <View><Text style={{color:'black',fontWeight:'bold',fontSize:20}}>Hii!</Text></View>
-                <View><Text style={{fontWeight:'bold',fontSize:20}}>{name.user_name}</Text></View>
+                   <View><Text style={{fontWeight:'bold',fontSize:20}}>{route.params.user_name}</Text></View>
 
                 </View>
             </View>
@@ -38,8 +59,8 @@ const HomePage = () => {
 
                 <View>
                 <View style={styles.cardnumber}>
-                    <Text style={{color:'white'}}>1234567892</Text>
-                    <Text style={{marginLeft:200,color:'white',fontSize:18}}>Maestro</Text>
+                     <Text style={{color:'white'}}>{route.params.cardnumber.cardnumber}</Text>
+                    <Text style={{marginLeft:200,color:'white',fontSize:15}}>Maestro</Text>
                 </View>
                 </View>
             </View>
@@ -62,7 +83,7 @@ const HomePage = () => {
             <TextInput placeholder='Enter the amount' style={{textAlign:'center'}}></TextInput>
             <Pressable
               style={[styles.button, styles.buttonClose]}
-              onPress={() => setModalVisible(!modalVisible)}>
+              onPress={closemodal}>
               <Text style={styles.textStylesubmit}>PROCEED TO TOPUP</Text>
             </Pressable>
           </View>
@@ -99,7 +120,7 @@ export default HomePage;
 const styles = StyleSheet.create({
     main: {
 
-        flex: 1
+        flex: 1,
     },
     header:{
         flex:0.5,

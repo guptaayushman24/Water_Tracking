@@ -69,6 +69,10 @@ const Walletsign = ({navigation}) => {
                         amountlength:newamount
                     })
                     navigation.navigate('SignInScreen');
+                    navigation.navigate('HomePage', {
+                        screen: 'Home', // Ensure this matches the Tab.Screen name
+                        params: { cardnumber: cardnumber }
+                      });
                 }
                 catch(err){
                     console.log(err);
