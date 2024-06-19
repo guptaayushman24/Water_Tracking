@@ -12,17 +12,23 @@ import Signin from './Signin';
 const HomePage = () => {
     const navigation = useNavigation();
     const route = useRoute();
-    // const route1 = useRoute();
-    // const name = route.params;
 
 
-    console.log("CardNumber in the HomePage",typeof route.params.cardnumber);
-    console.log("Route of username is",route);
-    console.log("Name in the Home Page is",typeof route.params.user_name);
-    // console.log("Card  Number is ",number.cardnumber);
-    console.log(route.params);
+
     const [modalVisible, setModalVisible] = useState(false);
     const [storeemail,setstoreemail] = useState();
+    // Storing the card number in the list
+    const [cardnumber,setcardnumber] = useState([]);
+    // Storing the index of the card number
+    const [index,setindex] = useState(-1);
+    // Storing the email address
+    const [email,setemail] = useState([]);
+    // Storing the amount
+    const [amount,setamount] = useState([]);
+    const [amountwallet,setamountwallet] = useState('');
+    // Storing the wallet amount
+    const [walletamountstore,setwalletamountstore] = useState([]);
+    const [newamount,setnewamount] = useState(-1);
      // Creating the component for the API
      const fetchdetail=async ()=>{
       try{
@@ -33,8 +39,81 @@ const HomePage = () => {
       catch(err){
         console.log(err);
       }
+
+      // Fetching the cardnumber
+      try{
+        const response = await axios.get('http://10.0.2.2:5000/bank/bankdetailcardnumberget');
+        setcardnumber(response.data);
+        for (let i=0;i<cardnumber.length;i++){
+          if (cardnumber[i].cardnumber.toString()===route.params.cardnumber.cardnumber.toString()){
+              setindex(i);
+              break;
+          }
+        }
+
+      }
+      catch(err){
+        console.log(err);
+      }
+      // Fetching the email
+      try{
+        const response = await axios.get('http://10.0.2.2:5000/bank/bankdetailemailget');
+        setemail(response.data);
+        // console.log(response.data);
+        console.log("Email on the particular index is",email[index].signupemail)
+      }
+      catch(err){
+        console.log(err);
+      }
+
+      // Fetching the amount
+      try{
+        const response = await axios.get('http://10.0.2.2:5000/bank/bankdetailgetamount');
+        setamount(response.data);
+        console.log(response.data);
+        console.log("Amount on the particular index is",amount[index].amountlength)
+        // console.log("Amount on the particular index is",typeof amount[index].amountlength)
+      }
+      catch(err){
+        console.log(err);
+      }
+
+      // Fetching the wallet amount
+      try{
+        const response = await axios.get('http://10.0.2.2:5000/wallet/walletamountget');
+        console.log(response.data);
+        setwalletamountstore(response.data);
+      }
+      catch(err){
+        console.log(err);
+      }
+
+      console.log("The amount in the wallet on the index is", walletamountstore[index].amountadded);
+      console.log("The amount which we want to submit", parseInt(amountwallet));
+      if (amount[index].amountlength>=parseInt(amountwallet)){
+         setnewamount(walletamountstore[index].amountadded+parseInt(amountwallet));
+        console.log("The new amount is ",newamount);
+        try{
+          await axios.put('http://10.0.2.2:5000/wallet/walletupdate',{
+            email:email[index].signupemail.toString(),
+            amountadded:newamount
+        })
+        }
+        catch(err){
+          console.log(err);
+        }
+       }
+       else{
+        console.log("Insufficent Amount");
+       }
      }
+     useEffect(()=>{
+      fetchdetail();
+  },[index,newamount]);
+
+  console.log("The index of cardnumber is",index);
     const closemodal=async ()=>{
+      console.log("Pop up button is pressed")
       setModalVisible(!modalVisible)
       await fetchdetail();
     }
@@ -80,7 +159,8 @@ const HomePage = () => {
         <View style={styles.centeredView}>
           <View style={styles.modalView}>
             {/* <Text style={styles.modalText}>Hello World!</Text> */}
-            <TextInput placeholder='Enter the amount' style={{textAlign:'center'}}></TextInput>
+            <TextInput placeholder='Enter the amount' style={{textAlign:'center'}}
+            onChangeText={(amountwallet)=>setamountwallet(amountwallet)}></TextInput>
             <Pressable
               style={[styles.button, styles.buttonClose]}
               onPress={closemodal}>
