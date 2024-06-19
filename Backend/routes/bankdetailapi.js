@@ -101,4 +101,25 @@ router.put('/bankdetailwalletupdate',async (req,res)=>{
    }
 })
 
+router.put('/bankdetailupdatemail',async (req,res)=>{
+   const { signupemail, amountlength } = req.body;
+   try{
+      const response = await bankdetailschema.updateOne(
+         { signupemail: signupemail }, // Query to match the name
+         { $set: { amountlength: amountlength } } // Update the bankname field
+       );
+       if (response.nModified === 0) {
+         res.status(404).send('No document found with the specified name');
+       } else {
+         res.status(200).send('Update successful');
+       }
+
+       console.log(response);
+   }
+   catch(err){
+      console.log(err);
+   }
+})
+
+
 module.exports = router;
