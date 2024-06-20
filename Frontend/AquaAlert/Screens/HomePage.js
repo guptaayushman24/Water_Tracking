@@ -3,15 +3,20 @@ import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { NavigationContainer, useNavigation } from '@react-navigation/native';
 import { useRoute } from '@react-navigation/native';
 import { useDeferredValue, useEffect, useState } from 'react';
+import { useIsFocused } from '@react-navigation/native';
 import axios from 'axios';
 import Wallet from './Wallet';
 import Report from './Report';
 import Account from './Account';
 import AddMoney from './AddMoney';
 import Signin from './Signin';
+
 const HomePage = () => {
+
   const navigation = useNavigation();
+
   const route = useRoute();
+  const isFocused = useIsFocused();
 
 
 
@@ -115,8 +120,6 @@ const HomePage = () => {
     }
     // We can update the amount in the bank
     if (temp != 1) {
-      // Calling the GET API for the amount which is present in the bank
-
       try {
          setnewbankamount(amount[index].amountlength-parseInt(amountwallet));
          console.log("Updated amount in bank",amount[index].amountlength-parseInt(amountwallet));
@@ -132,8 +135,11 @@ const HomePage = () => {
     }
   }
   useEffect(() => {
-    fetchdetail();
-  }, [index, newamount,newbankamout]);
+    if (isFocused){
+      console.log(isFocused);
+       fetchdetail();
+    }
+  }, [index, newamount,newbankamout,isFocused]);
 
   console.log("The index of cardnumber is", index);
   const closemodal = async () => {
@@ -153,57 +159,65 @@ const HomePage = () => {
 
         </View>
       </View>
-
+      <View style={styles.container}>
       <View style={styles.carddesign}>
         <View style={styles.amount}>
           <Text style={{ color: 'white', fontSize: 18 }}>Balance</Text>
-          <Text style={{ color: 'white', fontSize: 22 }}>Rs 2000</Text>
+          <Text style={{ color: 'white', fontSize: 22 }}>Rs</Text>
         </View>
 
-        <View>
-          <View style={styles.cardnumber}>
-            <Text style={{ color: 'white' }}>{route.params.cardnumber.cardnumber}</Text>
-            <Text style={{ marginLeft: 200, color: 'white', fontSize: 15 }}>Maestro</Text>
-          </View>
+        <View style={styles.amount}>
+          <Text style={{ color: 'white', fontSize: 18 }}>Wallet Amount</Text>
+          <Text style={{ color: 'white', fontSize: 18 }}>Rs</Text>
         </View>
       </View>
-      <View style={styles.functionality}>
-        <View style={styles.upperbtn}>
-          <View style={styles.centeredView}>
-            {/* <TouchableOpacity><Text style={{textAlign:"center",marginTop:10,fontSize:18,color:'white'}}>Add Money</Text></TouchableOpacity> */}
-            {/* <View style={styles.centeredView}> */}
-            <Modal
-              animationType="slide"
-              transparent={true}
-              visible={modalVisible}
-              onRequestClose={() => {
-                Alert.alert('Modal has been closed.');
-                setModalVisible(!modalVisible);
-              }}>
-              <View style={styles.centeredView}>
-                <View style={styles.modalView}>
-                  {/* <Text style={styles.modalText}>Hello World!</Text> */}
-                  <TextInput placeholder='Enter the amount' style={{ textAlign: 'center' }}
-                    onChangeText={(amountwallet) => setamountwallet(amountwallet)}></TextInput>
-                  <Pressable
-                    style={[styles.button, styles.buttonClose]}
-                    onPress={closemodal}>
-                    <Text style={styles.textStylesubmit}>PROCEED TO TOPUP</Text>
-                  </Pressable>
-                </View>
-              </View>
-            </Modal>
-            <Pressable
-              style={[styles.button, styles.buttonOpen]}
-              onPress={() => setModalVisible(true)}>
-              <Text style={styles.textStyle}>Add Money</Text>
-            </Pressable>
 
-          </View>
-          <View style={styles.transfermoney}>
-            <TouchableOpacity><Text style={{ textAlign: "center", marginTop: 10, fontSize: 18, color: 'white' }}>Transfer Money</Text></TouchableOpacity>
+      <View>
+        <View style={styles.cardnumber}>
+          <Text style={{ color: 'white' }}>{route.params.cardnumber.cardnumber}</Text>
+          <Text style={{ marginLeft: 200, color: 'white', fontSize: 15 }}>Maestro</Text>
+        </View>
+      </View>
+    </View>
+      <View style={styles.functionality}>
+          <View style={styles.container1}>
+      <View style={styles.upperbtn}>
+        <Pressable
+          style={[styles.button, styles.buttonOpen]}
+          onPress={() => setModalVisible(true)}>
+          <Text style={styles.textStyle}>Add Money</Text>
+        </Pressable>
+        <Pressable
+          style={[styles.button, styles.buttonOpen]}
+          onPress={() => setModalVisible(true)}>
+          <Text style={styles.textStyle}>Transfer Money</Text>
+        </Pressable>
+      </View>
+
+      <Modal
+        animationType="slide"
+        transparent={true}
+        visible={modalVisible}
+        onRequestClose={() => {
+          Alert.alert('Modal has been closed.');
+          setModalVisible(!modalVisible);
+        }}>
+        <View style={styles.centeredView}>
+          <View style={styles.modalView}>
+            <TextInput
+              placeholder='Enter the amount'
+              style={{ textAlign: 'center' }}
+              onChangeText={(amountwallet) => setAmountwallet(amountwallet)}
+            />
+            <Pressable
+              style={[styles.button, styles.buttonClose]}
+              onPress={closemodal}>
+              <Text style={styles.textStylesubmit}>PROCEED TO TOPUP</Text>
+            </Pressable>
           </View>
         </View>
+      </Modal>
+    </View>
         <View style={styles.lowerbtn}>
           <View style={styles.deposit}>
             <TouchableOpacity onPress={() => navigation.navigate('AddMoney')}><Text style={{ textAlign: "center", marginTop: 10, fontSize: 18 }}>Deposit</Text></TouchableOpacity>
@@ -226,21 +240,16 @@ const styles = StyleSheet.create({
 
     flex: 1,
   },
+  // container: {
+  //   flex: 1,
+  //   justifyContent: 'center',
+  //   alignItems: 'center',
+  // },
   header: {
     flex: 0.5,
   },
-  carddesign: {
-    flex: 0.65,
-    backgroundColor: '#7b8afe',
-    height: 200,
-    width: 400,
-    borderRadius: 20,
-    alignSelf: "center",
-    margin: 10
-  },
   functionality: {
     flex: 1,
-    // backgroundColor:'blue',
   },
   transactionhistory: {
     flex: 1,
@@ -249,22 +258,14 @@ const styles = StyleSheet.create({
   userdetail: {
     margin: 50
   },
-  amount: {
-    margin: 10
-  },
-  cardnumber: {
-    margin: 10,
-    paddingTop: 40,
-    flexDirection: 'row'
-  },
   upperbtn: {
-    flex: 1,
-    // backgroundColor:'red',
     flexDirection: 'row',
+    justifyContent: 'space-around', // Distributes space between buttons
+    width: '100%',
+    padding: 20,
   },
   lowerbtn: {
     flex: 1,
-    // backgroundColor:'green',
     flexDirection: 'row'
   },
   addmoney: {
@@ -302,11 +303,13 @@ const styles = StyleSheet.create({
   },
   centeredView: {
     flex: 1,
-    alignItems: "center",
+    justifyContent: 'center',
+    alignItems: 'center',
     marginTop: 25,
   },
+
   modalView: {
-    marginTop: 115,
+    margin: 20,
     backgroundColor: 'white',
     borderRadius: 20,
     padding: 35,
@@ -324,8 +327,6 @@ const styles = StyleSheet.create({
     borderRadius: 20,
     padding: 10,
     elevation: 2,
-    width: 150,
-    height: 48
   },
   buttonOpen: {
     backgroundColor: '#7b8afe',
@@ -349,6 +350,46 @@ const styles = StyleSheet.create({
   modalText: {
     marginBottom: 15,
     textAlign: 'center',
+  },
+
+  container: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: '#7b8afe',
+    borderRadius:20,
+    margin:5,
+  },
+  container1:{
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    // backgroundColor: '#7b8afe',
+    borderRadius:20,
+    margin:5,
+  },
+  carddesign: {
+    flex: 0.65,
+    backgroundColor: '#7b8afe',
+    height: 200,
+    width: 400,
+    borderRadius: 20,
+    alignSelf: "center",
+    margin: 10,
+    flexDirection: 'row', // Makes the content inside horizontal
+    justifyContent: 'space-around', // Spacing out the items evenly
+    alignItems: 'center' // Center the items vertically
+  },
+  amount: {
+    margin: 10,
+    // backgroundColor: 'red',
+    padding: 10, // Optional: add padding for better spacing
+    borderRadius: 10, // Optional: add border radius for rounded corners
+  },
+  cardnumber: {
+    margin: 10,
+    paddingTop: 40,
+    flexDirection: 'row'
   }
 
 })
