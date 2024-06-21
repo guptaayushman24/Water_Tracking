@@ -40,7 +40,11 @@ const HomePage = () => {
   const[newbankamout,setnewbankamount] = useState(-1);
 
   const [transferamount,settransferamount] = useState('');
-
+  const [emailcompare,setemailcompare] = useState('');
+  const [compareindex,setcompareindex] = useState(-1);
+  const [senderemailinput,setsenderemailinput] = useState('');
+  const [walletamountupdate,setwalletamountupdate] = useState('');
+  const [senderwalletupdate,setsenderwalletupdate] = useState('');
   // Creating the component for the API
   const fetchdetail = async () => {
     try {
@@ -109,7 +113,7 @@ const HomePage = () => {
       console.log("The new amount is ", newamount);
       try {
         await axios.put('http://10.0.2.2:5000/wallet/walletupdate', {
-          email: email[index].signupemail.toString(),
+          email: email[index].signupemail,
           amountadded: newamount
         })
       }
@@ -127,7 +131,7 @@ const HomePage = () => {
          setnewbankamount(amount[index].amountlength-parseInt(amountwallet));
          console.log("Updated amount in bank",amount[index].amountlength-parseInt(amountwallet));
         await axios.put('http://10.0.2.2:5000/bank/bankdetailupdatemail',{
-          signupemail:email[index].signupemail.toString(),
+          signupemail:email[index].signupemail,
           amountlength:newbankamout
         });
 
@@ -142,7 +146,7 @@ const HomePage = () => {
       console.log(isFocused);
       fetchdetail();
     }
-  }, [index, newamount,newbankamout,isFocused]); // 815 1869
+  }, [index, newamount,newbankamout,isFocused]);
 
   // Creatig the function for the Transfer Money
   const walletdata = async ()=>{
@@ -151,7 +155,46 @@ const HomePage = () => {
       console.log("Home Page email is",email[index].signupemail);
       console.log("The amount in the wallet of the HomePage user is",walletamountstore[index].amountadded);
 
-      //
+      // Fetching all the email address
+
+      const response = await axios.get('http://10.0.2.2:5000/wallet/walletemailget');
+      console.log(response.data);
+      setemailcompare(response.data);
+
+      for (let i=0;i<emailcompare.length;i++){
+        // console.log('Inside for loop')
+        if (response.data[i].email.toString()===senderemailinput.toString()){
+          setcompareindex(i);
+        }
+      }
+      console.log("Sender index is",compareindex);
+      // Transfering the money into another wallet
+      // First check sender is valid or not if index is -1 then not valid
+      // if (compareindex==-1){
+      //   Alert.alert('User does not exist');
+      // }
+      if (compareindex!=-1){
+        if (walletamountstore[index].amountadded>=parseInt(transferamount)){
+          setwalletamountupdate(walletamountstore[index].amountadded-parseInt(transferamount));
+          console.log('Updated amount in the wallet is',walletamountupdate);
+          await axios.put('http://10.0.2.2:5000/wallet/walletupdate',{
+            email:email[index].email,
+            amountadded:walletamountupdate
+          })
+          setsenderwalletupdate('User walllet amount after updation',walletamountstore[compareindex].amountadded+parseInt(transferamount));
+          console.log('Updated amount in the sender wallet is',walletamountstore[compareindex].amountadded+parseInt(transferamount));
+
+          await axios.put('http://10.0.2.2:5000/wallet/walletupdate',{
+            email:senderemailinput,
+            amountadded:senderwalletupdate
+          })
+
+        }
+        else{
+          Alert.alert('Insufficent Balance in the wallet');
+        }
+      }
+
     }
     catch(err){
       console.log(err);
@@ -159,6 +202,9 @@ const HomePage = () => {
     }
 
   console.log("The index of cardnumber is", index);
+  useEffect(()=>{
+    walletdata();
+  },[compareindex,walletamountstore]);
 
   const closemodal = async () => {
     // Alert.alert('Top-up with', amountwallet);
@@ -167,8 +213,8 @@ const HomePage = () => {
   };
 
   const closemodalTransfer = async () => {
+    await walletdata();
     console.log('Transfer Amount button is pressed')
-      await walletdata();
 
 
     setmodalVisibleTransfer(!modalVisibleTransfer);
@@ -249,7 +295,8 @@ const HomePage = () => {
             }}>
             <View style={styles.centeredView}>
               <View style={styles.modalView}>
-              <TextInput placeholder='Enter sender email' style={{textAlign:'center',fontSize:20}}></TextInput>
+              <TextInput placeholder='Enter sender email' style={{textAlign:'center',fontSize:20}}
+              onChangeText={(senderemailinput)=>setsenderemailinput(senderemailinput)}></TextInput>
                 <TextInput
                   placeholder='Enter transfer amount'
                   style={{ textAlign: 'center',fontSize:20 }}
