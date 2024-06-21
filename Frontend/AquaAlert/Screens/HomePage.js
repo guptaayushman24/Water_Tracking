@@ -21,6 +21,7 @@ const HomePage = () => {
 
 
   const [modalVisible, setModalVisible] = useState(false);
+  const [modalVisibleTransfer, setmodalVisibleTransfer] = useState(false);
   const [storeemail, setstoreemail] = useState();
   // Storing the card number in the list
   const [cardnumber, setcardnumber] = useState([]);
@@ -37,6 +38,8 @@ const HomePage = () => {
   const [newamount, setnewamount] = useState(-1);
   // State for updating the amount in the bank
   const[newbankamout,setnewbankamount] = useState(-1);
+
+  const [transferamount,settransferamount] = useState('');
 
   // Creating the component for the API
   const fetchdetail = async () => {
@@ -137,114 +140,154 @@ const HomePage = () => {
   useEffect(() => {
     if (isFocused){
       console.log(isFocused);
-       fetchdetail();
+      fetchdetail();
     }
-  }, [index, newamount,newbankamout,isFocused]);
+  }, [index, newamount,newbankamout,isFocused]); // 815 1869
+
+  // Creatig the function for the Transfer Money
+  const walletdata = async ()=>{
+    // Implement the API here for transfering the amount
+    try{
+      console.log("Home Page email is",email[index].signupemail);
+      console.log("The amount in the wallet of the HomePage user is",walletamountstore[index].amountadded);
+
+      //
+    }
+    catch(err){
+      console.log(err);
+    }
+    }
 
   console.log("The index of cardnumber is", index);
+
   const closemodal = async () => {
-    console.log("Pop up button is pressed")
-    setModalVisible(!modalVisible)
-    await fetchdetail();
-  }
+    // Alert.alert('Top-up with', amountwallet);
+     await fetchdetail();
+    setModalVisible(!modalVisible);
+  };
+
+  const closemodalTransfer = async () => {
+    console.log('Transfer Amount button is pressed')
+      await walletdata();
+
+
+    setmodalVisibleTransfer(!modalVisibleTransfer);
+  };
 
   return (
     <View style={styles.main}>
       <View style={styles.header}>
         <View style={styles.userdetail}>
-
-
           <View><Text style={{ color: 'black', fontWeight: 'bold', fontSize: 20 }}>Hii!</Text></View>
           <View><Text style={{ fontWeight: 'bold', fontSize: 20 }}>{route.params.user_name}</Text></View>
-
         </View>
       </View>
       <View style={styles.container}>
-      <View style={styles.carddesign}>
-        <View style={styles.amount}>
-          <Text style={{ color: 'white', fontSize: 18 }}>Balance</Text>
-          <Text style={{ color: 'white', fontSize: 22 }}>Rs</Text>
+        <View style={styles.carddesign}>
+          <View style={styles.amount}>
+            <Text style={{ color: 'white', fontSize: 18 }}>Balance</Text>
+            <Text style={{ color: 'white', fontSize: 22 }}>Rs {newbankamout}</Text>
+          </View>
+          <View style={styles.amount}>
+            <Text style={{ color: 'white', fontSize: 18 }}>Wallet Amount</Text>
+            <Text style={{ color: 'white', fontSize: 18 }}>Rs {newamount}</Text>
+          </View>
         </View>
-
-        <View style={styles.amount}>
-          <Text style={{ color: 'white', fontSize: 18 }}>Wallet Amount</Text>
-          <Text style={{ color: 'white', fontSize: 18 }}>Rs</Text>
+        <View>
+          <View style={styles.cardnumber}>
+            <Text style={{ color: 'white' }}>{route.params.cardnumber.cardnumber}</Text>
+            <Text style={{ marginLeft: 200, color: 'white', fontSize: 15 }}>Maestro</Text>
+          </View>
         </View>
       </View>
-
-      <View>
-        <View style={styles.cardnumber}>
-          <Text style={{ color: 'white' }}>{route.params.cardnumber.cardnumber}</Text>
-          <Text style={{ marginLeft: 200, color: 'white', fontSize: 15 }}>Maestro</Text>
-        </View>
-      </View>
-    </View>
       <View style={styles.functionality}>
-          <View style={styles.container1}>
-      <View style={styles.upperbtn}>
-        <Pressable
-          style={[styles.button, styles.buttonOpen]}
-          onPress={() => setModalVisible(true)}>
-          <Text style={styles.textStyle}>Add Money</Text>
-        </Pressable>
-        <Pressable
-          style={[styles.button, styles.buttonOpen]}
-          onPress={() => setModalVisible(true)}>
-          <Text style={styles.textStyle}>Transfer Money</Text>
-        </Pressable>
-      </View>
-
-      <Modal
-        animationType="slide"
-        transparent={true}
-        visible={modalVisible}
-        onRequestClose={() => {
-          Alert.alert('Modal has been closed.');
-          setModalVisible(!modalVisible);
-        }}>
-        <View style={styles.centeredView}>
-          <View style={styles.modalView}>
-            <TextInput
-              placeholder='Enter the amount'
-              style={{ textAlign: 'center' }}
-              onChangeText={(amountwallet) => setAmountwallet(amountwallet)}
-            />
+        <View style={styles.container1}>
+          <View style={styles.upperbtn}>
             <Pressable
-              style={[styles.button, styles.buttonClose]}
-              onPress={closemodal}>
-              <Text style={styles.textStylesubmit}>PROCEED TO TOPUP</Text>
+              style={[styles.button, styles.buttonOpen]}
+              onPress={() => setModalVisible(true)}>
+              <Text style={styles.textStyle}>Add Money</Text>
+            </Pressable>
+            <Pressable
+              style={[styles.button, styles.buttonOpen]}
+              onPress={() => setmodalVisibleTransfer(true)}>
+              <Text style={styles.textStyle}>Transfer Money</Text>
             </Pressable>
           </View>
+
+          <Modal
+            animationType="slide"
+            transparent={true}
+            visible={modalVisible}
+            onRequestClose={() => {
+              Alert.alert('Modal has been closed.');
+              setModalVisible(!modalVisible);
+            }}>
+            <View style={styles.centeredView}>
+              <View style={styles.modalView}>
+                <TextInput
+                  placeholder='Enter the amount'
+                  style={{ textAlign: 'center' }}
+                  onChangeText={(amountwallet) => setamountwallet(amountwallet)}
+                />
+                <Pressable
+                  style={[styles.button, styles.buttonClose]}
+                  onPress={closemodal}>
+                  <Text style={styles.textStylesubmit}>PROCEED TO TOPUP</Text>
+                </Pressable>
+              </View>
+            </View>
+          </Modal>
+
+          <Modal
+            animationType="slide"
+            transparent={true}
+            visible={modalVisibleTransfer}
+            onRequestClose={() => {
+              Alert.alert('Modal has been closed.');
+              setmodalVisibleTransfer(!modalVisibleTransfer);
+            }}>
+            <View style={styles.centeredView}>
+              <View style={styles.modalView}>
+              <TextInput placeholder='Enter sender email' style={{textAlign:'center',fontSize:20}}></TextInput>
+                <TextInput
+                  placeholder='Enter transfer amount'
+                  style={{ textAlign: 'center',fontSize:20 }}
+                  onChangeText={(transferamount) => settransferamount(transferamount)}
+                />
+                <Pressable
+                  style={[styles.button, styles.buttonClose]}
+                  onPress={closemodalTransfer}>
+                  <Text style={styles.textStylesubmit}>PROCEED TO TRANSFER</Text>
+                </Pressable>
+              </View>
+            </View>
+          </Modal>
         </View>
-      </Modal>
-    </View>
         <View style={styles.lowerbtn}>
           <View style={styles.deposit}>
-            <TouchableOpacity onPress={() => navigation.navigate('AddMoney')}><Text style={{ textAlign: "center", marginTop: 10, fontSize: 18 }}>Deposit</Text></TouchableOpacity>
+            <TouchableOpacity onPress={() => navigation.navigate('AddMoney')}>
+              <Text style={{ textAlign: "center", marginTop: 10, fontSize: 18 }}>Deposit</Text>
+            </TouchableOpacity>
           </View>
           <View style={styles.withdraw}>
-            <TouchableOpacity><Text style={{ textAlign: "center", marginTop: 10, fontSize: 18 }}>Withdraw</Text></TouchableOpacity>
+            <TouchableOpacity>
+              <Text style={{ textAlign: "center", marginTop: 10, fontSize: 18 }}>Withdraw</Text>
+            </TouchableOpacity>
           </View>
         </View>
       </View>
       <View style={styles.transactionhistory}></View>
     </View>
-  )
+  );
 }
-
 
 export default HomePage;
 
 const styles = StyleSheet.create({
   main: {
-
     flex: 1,
   },
-  // container: {
-  //   flex: 1,
-  //   justifyContent: 'center',
-  //   alignItems: 'center',
-  // },
   header: {
     flex: 0.5,
   },
@@ -307,7 +350,6 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     marginTop: 25,
   },
-
   modalView: {
     margin: 20,
     backgroundColor: 'white',
@@ -351,22 +393,21 @@ const styles = StyleSheet.create({
     marginBottom: 15,
     textAlign: 'center',
   },
-
   container: {
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
     backgroundColor: '#7b8afe',
-    borderRadius:20,
-    margin:5,
+    borderRadius: 20,
+    margin: 5,
   },
-  container1:{
+  container1: {
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
     // backgroundColor: '#7b8afe',
-    borderRadius:20,
-    margin:5,
+    borderRadius: 20,
+    margin: 5,
   },
   carddesign: {
     flex: 0.65,
@@ -391,5 +432,4 @@ const styles = StyleSheet.create({
     paddingTop: 40,
     flexDirection: 'row'
   }
-
-})
+});

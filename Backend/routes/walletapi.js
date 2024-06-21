@@ -48,6 +48,18 @@ router.get('/walletamountget',async(req,res)=>{
        console.log(err);
     }
  })
+ router.get('/walletemailget',async(req,res)=>{
+  try{
+     const data = await walletschema.find({},{email:1,_id:0});
+     res.status(200).json(data);
+     console.log(data);
+  }
+  catch(err){
+     res.status(500).json({err:'Internal Server Error'});
+     console.log(err);
+  }
+})
+
 
 
 module.exports=router;
