@@ -35,16 +35,19 @@ const HomePage = () => {
   // Storing the wallet amount
   const [walletamountstore, setwalletamountstore] = useState([]);
   // State for updating the amount in wallet
-  const [newamount, setnewamount] = useState(-1);
+  const [newamount, setnewamount] = useState(0);
   // State for updating the amount in the bank
-  const[newbankamout,setnewbankamount] = useState(-1);
+  const[newbankamout,setnewbankamount] = useState('');
 
-  const [transferamount,settransferamount] = useState('');
-  const [emailcompare,setemailcompare] = useState('');
-  const [compareindex,setcompareindex] = useState(-1);
+  // Email address of the reciever
   const [senderemailinput,setsenderemailinput] = useState('');
-  const [walletamountupdate,setwalletamountupdate] = useState('');
-  const [senderwalletupdate,setsenderwalletupdate] = useState('');
+  // Storing the amount which we want to transfer from wallet
+  const [transferamount,settransferamount] = useState(0);
+
+  // Storing the sender address
+  const [senderaddress,setsenderaddress] = useState('');
+  // Storing the Home Page email
+  const [homepageemail,sethomepageemail] = useState('');
   // Creating the component for the API
   const fetchdetail = async () => {
     try {
@@ -76,7 +79,7 @@ const HomePage = () => {
       const response = await axios.get('http://10.0.2.2:5000/bank/bankdetailemailget');
       setemail(response.data);
       // console.log(response.data);
-      console.log("Email on the particular index is", email[index].signupemail)
+      console.log("Email on the particular index is", email[index].signupemail);
     }
     catch (err) {
       console.log(err);
@@ -110,7 +113,8 @@ const HomePage = () => {
     let temp = 0;
     if (amount[index].amountlength >= parseInt(amountwallet)) {
       setnewamount(walletamountstore[index].amountadded + parseInt(amountwallet));
-      console.log("The new amount is ", newamount);
+      console.log("The new amount is ",newamount);
+      console.log("The new email is",email[index].signupemail);
       try {
         await axios.put('http://10.0.2.2:5000/wallet/walletupdate', {
           email: email[index].signupemail,
@@ -149,62 +153,7 @@ const HomePage = () => {
   }, [index, newamount,newbankamout,isFocused]);
 
   // Creatig the function for the Transfer Money
-  const walletdata = async ()=>{
-    // Implement the API here for transfering the amount
-    try{
-      console.log("Home Page email is",email[index].signupemail);
-      console.log("The amount in the wallet of the HomePage user is",walletamountstore[index].amountadded);
 
-      // Fetching all the email address
-
-      const response = await axios.get('http://10.0.2.2:5000/wallet/walletemailget');
-      console.log(response.data);
-      setemailcompare(response.data);
-
-      for (let i=0;i<emailcompare.length;i++){
-        // console.log('Inside for loop')
-        if (response.data[i].email.toString()===senderemailinput.toString()){
-          setcompareindex(i);
-        }
-      }
-      console.log("Sender index is",compareindex);
-      // Transfering the money into another wallet
-      // First check sender is valid or not if index is -1 then not valid
-      // if (compareindex==-1){
-      //   Alert.alert('User does not exist');
-      // }
-      if (compareindex!=-1){
-        if (walletamountstore[index].amountadded>=parseInt(transferamount)){
-          setwalletamountupdate(walletamountstore[index].amountadded-parseInt(transferamount));
-          console.log('Updated amount in the wallet is',walletamountupdate);
-          await axios.put('http://10.0.2.2:5000/wallet/walletupdate',{
-            email:email[index].email,
-            amountadded:walletamountupdate
-          })
-          setsenderwalletupdate('User walllet amount after updation',walletamountstore[compareindex].amountadded+parseInt(transferamount));
-          console.log('Updated amount in the sender wallet is',walletamountstore[compareindex].amountadded+parseInt(transferamount));
-
-          await axios.put('http://10.0.2.2:5000/wallet/walletupdate',{
-            email:senderemailinput,
-            amountadded:senderwalletupdate
-          })
-
-        }
-        else{
-          Alert.alert('Insufficent Balance in the wallet');
-        }
-      }
-
-    }
-    catch(err){
-      console.log(err);
-    }
-    }
-
-  console.log("The index of cardnumber is", index);
-  useEffect(()=>{
-    walletdata();
-  },[compareindex,walletamountstore]);
 
   const closemodal = async () => {
     // Alert.alert('Top-up with', amountwallet);
@@ -212,9 +161,24 @@ const HomePage = () => {
     setModalVisible(!modalVisible);
   };
 
+  const walletdata=async()=>{
+    console.log("Transfer Button is Pressed");
+    // First Fetch the email address of the Homepage
+    console.log("Email address on the HomePage is",email[index].signupemail);
+    try{
+      const  amountadded = walletamountstore[index].amountadded; // Number
+      // console.log("Amount", amountadded+101);
+
+      await axios.get('http://10.0.2.2:5000/wallet/walletemailget');
+      // if ()
+    }
+    catch(err){
+      console.log(err);
+    }
+  }
   const closemodalTransfer = async () => {
     await walletdata();
-    console.log('Transfer Amount button is pressed')
+    console.log('Transfer button is pressed')
 
 
     setmodalVisibleTransfer(!modalVisibleTransfer);
