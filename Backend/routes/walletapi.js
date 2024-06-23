@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const walletschema = require('../models/wallet');
-const { default: mongoose } = require('mongoose');
+
 
 router.post('/walletpost',async (req,res)=>{
     try{
@@ -17,7 +17,7 @@ router.post('/walletpost',async (req,res)=>{
 
 })
 
-router.put('/walletupdate',async(req,res)=>{
+router.put('/walletupdatesender',async(req,res)=>{
     const {email,amountadded} = req.body;
     try{
         const response = await walletschema.updateOne(
@@ -35,6 +35,26 @@ router.put('/walletupdate',async(req,res)=>{
      catch(err){
         console.log(err);
      }
+})
+
+router.put('/walletupdatereciever',async(req,res)=>{
+   const {email,amountadded} = req.body;
+   try{
+       const response = await walletschema.updateOne(
+          { email: email }, // Query to match the name
+          { $set: { amountadded: amountadded } } // Update the bankname field
+        );
+        if (response.nModified === 0) {
+          res.status(404).send('No document found with the specified name');
+        } else {
+          res.status(200).send('Update successful');
+        }
+
+        console.log(response);
+    }
+    catch(err){
+       console.log(err);
+    }
 })
 
 router.get('/walletamountget',async(req,res)=>{

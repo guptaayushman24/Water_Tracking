@@ -46,8 +46,26 @@ const HomePage = () => {
 
   // Storing the sender address
   const [senderaddress,setsenderaddress] = useState('');
+  // Storing all the address of wallet
+  const [walletaddress,setwalletaddress] = useState([]);
   // Storing the Home Page email
   const [homepageemail,sethomepageemail] = useState('');
+  // Index of the reciever
+  const [recieverindex,setrecieverindex] = useState(-1);
+  // Index of the sender
+  const[senderindex,setsenderindex] = useState(-1);
+
+  // Storing the amount of the Home Page user wallet of particular index
+  const [walletamountindexhomepage,setwalletamountindexhomepage] = useState(0);
+  // Storing all the emails of the wallet
+  const [walletemail,setwalletemail] = useState([]);
+
+  // Updating the wallet amount of the sender
+  const [senderamount,setsenderamount] = useState(0);
+
+  // Updating the wallet amount of the reciever
+  const [recieveramount,setrecieveramount] = useState(0);
+
   // Creating the component for the API
   const fetchdetail = async () => {
     try {
@@ -161,23 +179,109 @@ const HomePage = () => {
     setModalVisible(!modalVisible);
   };
 
-  const walletdata=async()=>{
-    console.log("Transfer Button is Pressed");
-    // First Fetch the email address of the Homepage
-    console.log("Email address on the HomePage is",email[index].signupemail);
+  const walletdatasender=async()=>{
+    // Use the seperate API do not use the above API
+    // Fetch all the email address of the wallet
     try{
-      const  amountadded = walletamountstore[index].amountadded; // Number
-      // console.log("Amount", amountadded+101);
-
-      await axios.get('http://10.0.2.2:5000/wallet/walletemailget');
-      // if ()
+      const response = await axios.get('http://10.0.2.2:5000/wallet/walletemailget');
+      setwalletaddress(response.data);
+      for (let i=0;i<walletaddress.length;i++){
+        if (walletaddress[i].email.toString()===senderemailinput){
+           setrecieverindex(i);
+        }
+      }
     }
     catch(err){
       console.log(err);
     }
+    console.log("The reciever index is",recieverindex);
+
+
+
+    // Fetching all the cardnumbers
+    try {
+      const response = await axios.get('http://10.0.2.2:5000/bank/bankdetailcardnumberget');
+      setcardnumber(response.data);
+      for (let i = 0; i < cardnumber.length; i++) {
+        if (cardnumber[i].cardnumber.toString() === route.params.cardnumber.cardnumber.toString()) {
+          setsenderindex(i);
+          break;
+        }
+      }
+      console.log("Sender index is",senderindex);
+
+    }
+    catch (err) {
+      console.log(err);
+    }
+
+     // Fetch all the wallet amount
+     try {
+      const response = await axios.get('http://10.0.2.2:5000/wallet/walletamountget');
+      console.log(response.data);
+      setwalletamountstore(response.data);
+      console.log("The amount of the HomePage user is",walletamountstore[senderindex]);
+      console.log("The amount of the Reciever user is",walletamountstore[recieverindex]);
+    }
+    catch (err) {
+      console.log(err);
+    }
+    // Fetching all the email address from the wallet
+    try{
+      const walletemailresponse = await axios.get('http://10.0.2.2:5000/wallet/walletemailget');
+      console.log(walletemailresponse.data);
+      setwalletemail(walletemailresponse.data);
+
+      for (let i=0;i<walletemail.length;i++){
+        console.log(walletemail[i].email);
+      }
+    }
+    catch(err){
+      console.log(err)
+    }
+    // Updating the amount in the wallet of the sender
+    const newsenderamount = walletamountstore[senderindex].amountadded-transferamount;
+    setsenderamount(newsenderamount);
+    const newrecieveramount = walletamountstore[recieverindex].amountadded+parseInt(transferamount);
+    setrecieveramount(newrecieveramount);
+    console.log("Recieveramount is",newrecieveramount);
+    console.log("The new amount of the sender is",newsenderamount);
+    console.log("The transfer amount is",transferamount);
+    console.log("The email adrress of sender is",walletemail[senderindex].email);
+    console.log("The email adrress of reciever is",walletemail[recieverindex].email);
+    if (newsenderamount>=0){
+      try{
+        await axios.put('http://10.0.2.2:5000/wallet/walletupdatesender',{
+          email:walletemail[senderindex].email,
+          amountadded:senderamount
+        })
+      }
+      catch(err){
+        console.log(err);
+      }
+
+
+      try{
+        await axios.put('http://10.0.2.2:5000/wallet/walletupdatereciever',{
+          email:walletemail[recieverindex].email,
+          amountadded:newrecieveramount
+        })
+      }
+      catch(err){
+        console.log(err);
+      }
+
+    }
+
+
+
+
   }
+  useEffect(()=>{
+    walletdatasender();
+  },[recieverindex,senderindex,senderamount]); // senderamount,recieveramount
   const closemodalTransfer = async () => {
-    await walletdata();
+    await walletdatasender();
     console.log('Transfer button is pressed')
 
 
@@ -259,7 +363,7 @@ const HomePage = () => {
             }}>
             <View style={styles.centeredView}>
               <View style={styles.modalView}>
-              <TextInput placeholder='Enter sender email' style={{textAlign:'center',fontSize:20}}
+              <TextInput placeholder='Enter reciever email' style={{textAlign:'center',fontSize:20}}
               onChangeText={(senderemailinput)=>setsenderemailinput(senderemailinput)}></TextInput>
                 <TextInput
                   placeholder='Enter transfer amount'
