@@ -164,18 +164,18 @@ const HomePage = () => {
     }
   }
   useEffect(() => {
-    if (isFocused){
       console.log(isFocused);
-      fetchdetail();
-    }
-  }, [index, newamount,newbankamout,isFocused]);
+       fetchdetail();
+  }, [index, newamount,newbankamout,navigation]);
 
   // Creatig the function for the Transfer Money
 
 
   const closemodal = async () => {
     // Alert.alert('Top-up with', amountwallet);
+    if (isFocused){
      await fetchdetail();
+    }
     setModalVisible(!modalVisible);
   };
 
