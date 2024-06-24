@@ -58,6 +58,8 @@ const Signin = () => {
     const [user_name, setuser_name] = useState('');
 
     const [cardnumber,setcardnumber] = useState([]);
+    // State for storing the bank amount
+    const [bankamount,setbankamount] = useState([]);
     // If user exist then maintaing that state we are using these state
     const [matchfound, setmatchfound] = useState(true);
     useEffect(() => {
@@ -109,6 +111,18 @@ const Signin = () => {
             catch(err){
                 console.log(err);
             }
+
+            // Calling the bank amount and wallet amount API
+
+           try{
+            const responseamount = await axios.get('http://10.0.2.2:5000/bank/bankdetailgetamount');
+             setbankamount(responseamount.data);
+            //  console.log("Bank Balance on the index is",bankamount[0].amountlength);
+            // console.log(bankamount[1].amountlength);
+           }
+           catch(err){
+            console.log(err);
+           }
 
 
         }
@@ -224,7 +238,8 @@ const Signin = () => {
                     navigation.navigate('HomePage', {
                         screen: 'Home', // Ensure this matches the Tab.Screen name
                         params:{ user_name:user_name,
-                            cardnumber:cardnumber[index]
+                            cardnumber:cardnumber[index], // From here we can send the bank amount and wallet amount
+                            // bankbalance:bankamount[index]
                         }
                       });
 

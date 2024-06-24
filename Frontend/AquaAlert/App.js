@@ -1,7 +1,6 @@
 import { SafeAreaView, StyleSheet, Text, View } from 'react-native';
 import Signup from './Screens/Signup';
 import Signin from './Screens/Signin';
-import Test from './Screens/Test';
 import {DrawerRouter, NavigationContainer} from '@react-navigation/native';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';

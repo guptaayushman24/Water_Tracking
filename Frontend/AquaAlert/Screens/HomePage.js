@@ -66,6 +66,7 @@ const HomePage = () => {
   // Updating the wallet amount of the reciever
   const [recieveramount,setrecieveramount] = useState(0);
 
+  // console.log("Amount of the bank balance is",route.params.bankbalance.amountlength);
   // Creating the component for the API
   const fetchdetail = async () => {
     try {
@@ -108,8 +109,7 @@ const HomePage = () => {
       const response = await axios.get('http://10.0.2.2:5000/bank/bankdetailgetamount');
       setamount(response.data);
       console.log(response.data);
-      console.log("Amount on the particular index is", amount[index].amountlength)
-      // console.log("Amount on the particular index is",typeof amount[index].amountlength)
+      // console.log("Amount on the particular index is", amount[index].amountlength)
     }
     catch (err) {
       console.log(err);
@@ -147,6 +147,7 @@ const HomePage = () => {
       console.log("Insufficent Amount");
       temp = 1
     }
+    console.log("The new amount of  the wallet is",newamount);
     // We can update the amount in the bank
     if (temp != 1) {
       try {
