@@ -301,7 +301,7 @@ const HomePage = () => {
         <View style={styles.carddesign}>
           <View style={styles.amount}>
             <Text style={{ color: 'white', fontSize: 18 }}>Balance</Text>
-            <Text style={{ color: 'white', fontSize: 22 }}>Rs {newbankamout}</Text>
+            <Text style={{ color: 'white', fontSize: 22 }}>Rs {newbankamout || route.params.bankbalance.amountlength}</Text>
           </View>
           <View style={styles.amount}>
             <Text style={{ color: 'white', fontSize: 18 }}>Wallet Amount</Text>

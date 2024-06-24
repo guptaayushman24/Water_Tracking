@@ -239,7 +239,7 @@ const Signin = () => {
                         screen: 'Home', // Ensure this matches the Tab.Screen name
                         params:{ user_name:user_name,
                             cardnumber:cardnumber[index], // From here we can send the bank amount and wallet amount
-                            // bankbalance:bankamount[index]
+                            bankbalance:bankamount[index]
                         }
                       });
 
