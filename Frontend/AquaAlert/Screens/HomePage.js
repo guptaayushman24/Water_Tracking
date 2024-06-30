@@ -5,7 +5,7 @@ import { useRoute } from '@react-navigation/native';
 import { useDeferredValue, useEffect, useState } from 'react';
 import { useIsFocused } from '@react-navigation/native';
 import axios from 'axios';
-import Wallet from './Wallet';
+import Wallet from './Stock';
 import Report from './Report';
 import Account from './Account';
 import AddMoney from './AddMoney';
@@ -300,12 +300,7 @@ const HomePage = () => {
       <View style={styles.container}>
         <View style={styles.carddesign}>
           <View style={styles.amount}>
-            <Text style={{ color: 'white', fontSize: 18 }}>Balance</Text>
-            <Text style={{ color: 'white', fontSize: 22 }}>Rs {newbankamout || route.params.bankbalance.amountlength}</Text>
-          </View>
-          <View style={styles.amount}>
-            <Text style={{ color: 'white', fontSize: 18 }}>Wallet Amount</Text>
-            <Text style={{ color: 'white', fontSize: 18 }}>Rs {newamount}</Text>
+            <Text>Card Holder email: {route.params.user_name}</Text>
           </View>
         </View>
         <View>

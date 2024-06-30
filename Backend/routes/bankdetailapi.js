@@ -121,5 +121,15 @@ router.put('/bankdetailupdatemail',async (req,res)=>{
    }
 })
 
+router.get('/bankname',async(req,res)=>{
+   try{
+      const response = await bankdetailschema.find({},{bankname:1,_id:0});
+      res.status(200).json(response);
+      console.log(response);
+   }
 
+   catch(err){
+      console.log(err);
+   }
+})
 module.exports = router;

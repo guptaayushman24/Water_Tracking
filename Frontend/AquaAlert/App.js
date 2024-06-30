@@ -12,6 +12,7 @@ import BankDetail from './Screens/BankDetail'
 import AddMoney from './Screens/AddMoney';
 import HomeTabs from './Screens/HomeTabs';
 import Walletsign from './Screens/Wallet_Signin';
+import { AppProvider } from './Global/APIContext';
 const Stack = createNativeStackNavigator();
 
 
@@ -19,7 +20,7 @@ export default function App() {
 
   return (
 
-
+    <AppProvider>
 
     <NavigationContainer>
 
@@ -33,9 +34,9 @@ export default function App() {
          <Stack.Screen name='AddMoney' component={AddMoney} options={{headerShown:false}}/>
          <Stack.Screen name='WalletSignin' component={Walletsign} options={{headerShown:false}}/>
       </Stack.Navigator>
-
-
     </NavigationContainer>
+    </AppProvider>
+
     // <HomePage></HomePage>
     // <Signup></Signup>
     // <Signin></Signin>

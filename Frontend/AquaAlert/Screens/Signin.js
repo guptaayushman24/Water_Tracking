@@ -1,17 +1,20 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState ,useContext} from 'react';
 import { StyleSheet, Text, TextInput, View, Image, ImageBackground, TouchableOpacity, Animated, Ic } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient'
 import { useNavigation } from '@react-navigation/native';
+import { AppContext } from '../Global/APIContext';
 import HomePage from './HomePage';
 import axios from 'axios'
 const Signin = () => {
+    const { email, setemail } = useContext(AppContext);
     const navigation = useNavigation();
     // State for the setting the placeholder in name in textbox
     const [placeholdertext, Setplaceholdertext] = useState('Enter your email');
 
     // State for handling the username
-    const [email, setemail] = useState('');
+    // const [email, setemail] = useState('');
     // State for displaying the warning if user did not enterd any email
+
     const [emailwarning, setemailwarning] = useState(false);
 
 
