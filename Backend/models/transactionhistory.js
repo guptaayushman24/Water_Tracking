@@ -1,6 +1,10 @@
 const mongoose = require('mongoose');
 const transactionmodel = new mongoose.Schema({
-    Senderemail:{
+    SenderEmail:{
+        type:String,
+        require:true
+    },
+    RecieverEmail:{
         type:String,
         require:true
     },
@@ -9,5 +13,6 @@ const transactionmodel = new mongoose.Schema({
         require:true,
     }
 },{require:true});
-const transaction = mongoose.model(transaction,transactionmodel);
+const transaction = mongoose.model('transaction',transactionmodel);
+
 module.exports = transaction;

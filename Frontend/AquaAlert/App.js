@@ -7,7 +7,6 @@ import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import HomePage from './Screens/HomePage';
 import Account from './Screens/Account';
 import Wallet from './Screens/Account';
-import Report from './Screens/Account';
 import BankDetail from './Screens/BankDetail'
 import AddMoney from './Screens/AddMoney';
 import HomeTabs from './Screens/HomeTabs';

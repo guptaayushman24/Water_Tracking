@@ -2,7 +2,7 @@ import React,{useRef,useEffect} from 'react';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import HomePage from './HomePage'; // Ensure this is the correct path
 import Wallet from './Stock';
-import Report from './Report';
+import Transaction_History from './Transaction_History'
 import Account from './Account';
 import { Image, StyleSheet,Animated } from 'react-native';
 const Tab = createBottomTabNavigator();
@@ -53,7 +53,7 @@ const HomeTabs = () => {
       />
       <Tab.Screen
         name="Transaction History"
-        component={Report}
+        component={Transaction_History}
         options={{
 
           headerShown: false,

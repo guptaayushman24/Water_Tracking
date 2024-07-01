@@ -2,18 +2,18 @@ import { SafeAreaView, StyleSheet, Text, TouchableOpacity, View, Modal, Pressabl
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { NavigationContainer, useNavigation } from '@react-navigation/native';
 import { useRoute } from '@react-navigation/native';
-import { useDeferredValue, useEffect, useState } from 'react';
+import { useDeferredValue, useEffect, useState,useContext } from 'react';
 import { useIsFocused } from '@react-navigation/native';
 import axios from 'axios';
 import Wallet from './Stock';
-import Report from './Report';
 import Account from './Account';
 import AddMoney from './AddMoney';
 import Signin from './Signin';
-
+import { AppContext } from '../Global/APIContext';
 const HomePage = () => {
 
   const navigation = useNavigation();
+
 
   const route = useRoute();
   const isFocused = useIsFocused();
@@ -66,6 +66,7 @@ const HomePage = () => {
   // Updating the wallet amount of the reciever
   const [recieveramount,setrecieveramount] = useState(0);
 
+  const { email_sender } = useContext(AppContext);
   // console.log("Amount of the bank balance is",route.params.bankbalance.amountlength);
   // Creating the component for the API
   const fetchdetail = async () => {
@@ -155,7 +156,7 @@ const HomePage = () => {
          console.log("Updated amount in bank",amount[index].amountlength-parseInt(amountwallet));
         await axios.put('http://10.0.2.2:5000/bank/bankdetailupdatemail',{
           signupemail:email[index].signupemail,
-          amountlength:newbankamout
+          amountlength:amount[index].amountlength-parseInt(amountwallet)
         });
 
       }
@@ -271,18 +272,24 @@ const HomePage = () => {
       catch(err){
         console.log(err);
       }
-
     }
-
-
-
-
   }
   useEffect(()=>{
     walletdatasender();
-  },[recieverindex,senderindex,senderamount]); // senderamount,recieveramount
+
+  },[recieverindex,senderindex,senderamount]);
   const closemodalTransfer = async () => {
     await walletdatasender();
+    try{
+      await axios.post('http://10.0.2.2:5000/transaction/tranactionpost',{
+        SenderEmail:walletemail[senderindex].email,
+        RecieverEmail:senderemailinput,
+        AmountRecieved:transferamount
+    })
+  }
+    catch(err){
+      console.log(err);
+    }
     console.log('Transfer button is pressed')
 
 

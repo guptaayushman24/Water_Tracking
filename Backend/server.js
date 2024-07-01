@@ -8,11 +8,11 @@ app.use(bodyParser.json());
 const usersignuproute = require('./routes/usersignupapi');
 const bankapi = require('./routes/bankdetailapi');
 const walletapi = require('./routes/walletapi');
-
+const transactionhistory = require('./routes/transaction_history_api');
 app.use('/signup',usersignuproute);
 app.use('/bank',bankapi);
 app.use('/wallet',walletapi);
-
+app.use('/transaction',transactionhistory);
 // Creating the lister where server will run
 
 app.listen(5000, () => {
