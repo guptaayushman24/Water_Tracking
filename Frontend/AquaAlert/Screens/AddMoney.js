@@ -1,8 +1,9 @@
 import { useDeferredValue, useEffect, useState } from 'react';
 import axios from 'axios';
 import { SafeAreaView, StyleSheet, Text, TouchableOpacity, View, TextInput } from 'react-native';
-
+import { useNavigation } from '@react-navigation/native';
 const AddMoney = () => {
+  const navigation = useNavigation();
   const [accountnumber, setaccountnumber] = useState('');
   const [accountnumberlength, setaccountnumberlength] = useState(false);
   const [validaccountnumber, setvalidaccountnumber] = useState(false);
@@ -99,6 +100,7 @@ const AddMoney = () => {
           accountnumber,
           amountlength: new_amount
         });
+        navigation.navigate('HomePage');
       }
     } catch (err) {
       console.log(err);
