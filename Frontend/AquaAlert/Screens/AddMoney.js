@@ -50,10 +50,10 @@ const AddMoney = () => {
       }
     }
 
-
     if (new_index !== -1) {
       new_amount = fetchamount[new_index].amountlength + parseInt(amountlength);
       setcurramount(new_amount);
+      console.log("Type of new_amount",typeof curramount);
     }
   })
 
@@ -133,7 +133,7 @@ const AddMoney = () => {
         </View>
         <View style={styles.warningview}>
           {amount && <Text style={styles.warningtxt}>*Please enter the amount</Text>}
-          {!amount && validamount && <Text style={{ color: 'red', fontSize: 15 }}>*Please enter the amount between Rs100 and Rs50000</Text>}
+          {/* {!amount && validamount && <Text style={{ color: 'red', fontSize: 15 }}>*Please enter the amount between Rs100 and Rs50000</Text>} */}
         </View>
       </View>
 
