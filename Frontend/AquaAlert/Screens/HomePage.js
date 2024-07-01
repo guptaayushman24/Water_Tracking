@@ -130,6 +130,7 @@ const HomePage = () => {
     console.log("The amount which we want to submit", parseInt(amountwallet));
 
     let temp = 0;
+    console.log("The length of the amount wallet is ",amountwallet.length);
     if (amount[index].amountlength >= parseInt(amountwallet)) {
       setnewamount(walletamountstore[index].amountadded + parseInt(amountwallet));
       console.log("The new amount is ",newamount);
@@ -152,12 +153,13 @@ const HomePage = () => {
     // We can update the amount in the bank
     if (temp != 1) {
       try {
-         setnewbankamount(amount[index].amountlength-parseInt(amountwallet));
+         setnewbankamount(amount[index].amountlength-parseInt(amountwallet) && amountwallet>0);
          console.log("Updated amount in bank",amount[index].amountlength-parseInt(amountwallet));
         await axios.put('http://10.0.2.2:5000/bank/bankdetailupdatemail',{
           signupemail:email[index].signupemail,
           amountlength:amount[index].amountlength-parseInt(amountwallet)
         });
+        setamountwallet('');
 
       }
       catch (err) {

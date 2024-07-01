@@ -17,6 +17,7 @@ router.post('/tranactionpost',async(req,res)=>{
 
 router.get('/transaction/email',async(req,res)=>{
     const {email} = req.query;
+    console.log("Server side",req.query);
     try{
         const transaction = await transactionhistoryschema.find({SenderEmail:email});
         res.status(200).json(transaction);
